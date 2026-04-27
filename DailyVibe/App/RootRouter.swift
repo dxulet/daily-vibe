@@ -1,7 +1,7 @@
 //  RootRouter.swift
 //  DailyVibe — App
 //
-//  The single NavigationStack owner. NAV-01..NAV-08 land here.
+//  The single nav-stack owner. NAV-01..NAV-08 land here.
 //
 //  Owns:
 //    - @State path = NavigationPath()         (NAV-02)

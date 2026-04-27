@@ -10,7 +10,7 @@
 //  path.wrappedValue.append(Route.X) directly.
 //
 //  Note: .feed exists for API completeness even though FeedScreen
-//  is the NavigationStack root (rarely fires in practice).
+//  is the nav-stack root (rarely fires in practice).
 //  See FOUN-06.
 
 import Foundation
