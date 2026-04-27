@@ -14,4 +14,5 @@ extension Color {
     static let vibeSecondaryText = Color(red: 142/255, green: 142/255, blue: 147/255)
     static let vibeAccent = Color(red: 255/255, green: 204/255, blue: 77/255)
     static let vibeDestructive = Color(red: 255/255, green: 59/255, blue: 48/255)
+    static let vibeAvatarMuted = Color(red: 139/255, green: 130/255, blue: 224/255)  // ~#8B82E0 — profile circle / Settings avatar; reserves yellow vibeAccent for ✦ glyph surfaces
 }
