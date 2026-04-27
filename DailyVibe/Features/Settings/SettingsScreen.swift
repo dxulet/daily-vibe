@@ -1,8 +1,9 @@
-//  SettingsScreen.swift
-//  DailyVibe — Features/Settings
 //
-//  Phase 1 stub for sheet compilation. Phase 4 fills this with the
-//  real iOS list (SETT-01..05).
+//  SettingsScreen.swift
+//  DailyVibe
+//
+//  Created by Daulet Ashikbayev on 27.04.2026.
+//
 
 import SwiftUI
 

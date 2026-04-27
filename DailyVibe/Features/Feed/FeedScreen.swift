@@ -1,14 +1,9 @@
+//
 //  FeedScreen.swift
-//  DailyVibe — Features/Feed
+//  DailyVibe
 //
-//  Phase 1 placeholder. The stack root inside RootRouter's nav stack.
-//  Phase 3 grows this into the real Feed (DailyVibeStrip + 3 PostCard rows
-//  + shutter button). For Phase 1, a debug button row demonstrates that
-//  every Route push fires (Phase 1 Success Criterion 2).
+//  Created by Daulet Ashikbayev on 27.04.2026.
 //
-//  Signature: receives Binding<NavigationPath> for autonomous push,
-//  and onProfileTap closure for opening the Settings sheet (NAV-04 +
-//  CONTEXT.md "RootRouter wiring": closure callback, not Binding<Bool>).
 
 import SwiftUI
 
@@ -28,8 +23,6 @@ struct FeedScreen: View {
                     .font(.vibeAccentLowercase)
                     .foregroundStyle(Color.vibeSecondaryText)
 
-                // Debug push buttons — demonstrate every Route case fires.
-                // Phase 3 deletes this block when the real Feed body lands.
                 VStack(spacing: 8) {
                     Button("push postConfirm") {
                         path.append(Route.postConfirm)

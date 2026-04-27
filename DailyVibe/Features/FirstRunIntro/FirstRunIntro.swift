@@ -1,12 +1,9 @@
+//
 //  FirstRunIntro.swift
-//  DailyVibe — Features/FirstRunIntro
+//  DailyVibe
 //
-//  Phase 1 stub for sheet compilation. Phase 4 fills this with the
-//  real ✦ icon + "Today, BeReal has a vibe." headline + body copy +
-//  "Got it" filled white button (per INTR-01..07).
+//  Created by Daulet Ashikbayev on 27.04.2026.
 //
-//  Uses @Environment(\.dismiss) — NOT a Binding<Bool> from RootRouter
-//  (CONTEXT.md lock; RESEARCH.md Pitfall 7).
 
 import SwiftUI
 

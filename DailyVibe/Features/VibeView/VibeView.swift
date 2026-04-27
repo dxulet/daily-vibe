@@ -1,8 +1,9 @@
-//  VibeView.swift
-//  DailyVibe — Features/VibeView
 //
-//  Phase 1 placeholder. Phase 3 grows this into the real VibeView
-//  (prompt card + LazyVGrid of 6 matched DualCameraPhoto cells).
+//  VibeView.swift
+//  DailyVibe
+//
+//  Created by Daulet Ashikbayev on 27.04.2026.
+//
 
 import SwiftUI
 
@@ -20,9 +21,6 @@ struct VibeView: View {
                     .font(.vibeAccentLowercase)
                     .foregroundStyle(Color.vibeSecondaryText)
 
-                // Demo: push a postDetail to confirm Route.postDetail(Post)
-                // fires correctly with id-only Hashable. Phase 3 replaces
-                // this with grid-cell taps.
                 Button("push postDetail (matched post)") {
                     path.append(Route.postDetail(MockDataProvider.matchedPosts[0]))
                 }

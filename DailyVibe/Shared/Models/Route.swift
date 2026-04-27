@@ -1,17 +1,9 @@
+//
 //  Route.swift
-//  DailyVibe — Shared/Models
+//  DailyVibe
 //
-//  The single navigation route enum. Hashable is synthesized (all
-//  associated value types are Hashable; Post: Hashable is id-only,
-//  which keeps NavigationPath.append(.postDetail(post)) idempotent).
+//  Created by Daulet Ashikbayev on 27.04.2026.
 //
-//  RootRouter wires .navigationDestination(for: Route.self) over
-//  these four cases. Feature screens push by calling
-//  path.wrappedValue.append(Route.X) directly.
-//
-//  Note: .feed exists for API completeness even though FeedScreen
-//  is the nav-stack root (rarely fires in practice).
-//  See FOUN-06.
 
 import Foundation
 

@@ -1,10 +1,9 @@
-//  PostDetailScreen.swift
-//  DailyVibe — Features/PostDetail
 //
-//  Phase 1 placeholder. Receives Post directly (no ViewModel — DETL-01).
-//  Phase 3 grows this into the real PostDetail (DualCameraPhoto with
-//  marker + "✦ today's vibe" chip + caption + 3 RealMoji circles +
-//  "0 comments").
+//  PostDetailScreen.swift
+//  DailyVibe
+//
+//  Created by Daulet Ashikbayev on 27.04.2026.
+//
 
 import SwiftUI
 

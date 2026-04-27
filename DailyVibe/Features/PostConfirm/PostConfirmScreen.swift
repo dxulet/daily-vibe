@@ -1,11 +1,9 @@
-//  PostConfirmScreen.swift
-//  DailyVibe — Features/PostConfirm
 //
-//  Phase 1 placeholder. Phase 3 grows this into the real PostConfirm
-//  (DualCameraPhoto + MatchToggleRow + Send button). Per CONTEXT.md
-//  "Photo asset reference type on Post", PostConfirm hardcodes
-//  "photo_capture" + "selfie_capture" directly in the view body
-//  (Phase 3) — NOT a Post value, NOT consuming MockDataProvider.
+//  PostConfirmScreen.swift
+//  DailyVibe
+//
+//  Created by Daulet Ashikbayev on 27.04.2026.
+//
 
 import SwiftUI
 
@@ -23,9 +21,6 @@ struct PostConfirmScreen: View {
                     .font(.vibeAccentLowercase)
                     .foregroundStyle(Color.vibeSecondaryText)
 
-                // Demo NAV-06 wiring (path.removeLast()). Phase 3
-                // replaces this with the real Send / Retake / Close
-                // buttons that all call path.removeLast().
                 Button("close (path.removeLast())") {
                     path.removeLast()
                 }

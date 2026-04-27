@@ -1,9 +1,9 @@
-//  Friend.swift
-//  DailyVibe — Shared/Models
 //
-//  Friend identity record. Hashable conformance is explicit id-only
-//  for symmetry with Post (see Post.swift for the rationale that drives
-//  the discipline). Username/initials/avatarColor are display-only.
+//  Friend.swift
+//  DailyVibe
+//
+//  Created by Daulet Ashikbayev on 27.04.2026.
+//
 
 import SwiftUI
 

@@ -1,12 +1,9 @@
+//
 //  DailyVibeApp.swift
-//  DailyVibe — App
+//  DailyVibe
 //
-//  @main entry. Phase 0 used ContentView() as the WindowGroup root;
-//  Phase 1 swaps in RootRouter() which owns the single nav stack
-//  + NavigationPath + sheet flags.
+//  Created by Daulet Ashikbayev on 27.04.2026.
 //
-//  .preferredColorScheme(.dark) preserves SCAF-06 — dark mode is the
-//  only supported mode.
 
 import SwiftUI
 

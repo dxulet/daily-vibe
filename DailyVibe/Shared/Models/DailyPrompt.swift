@@ -1,9 +1,9 @@
-//  DailyPrompt.swift
-//  DailyVibe — Shared/Models
 //
-//  The day's vibe prompt. Synthesized Hashable is correct here:
-//  DailyPrompt is never a NavigationPath key (no Route case takes it as
-//  associated value), and all fields are Hashable. Idempotency is moot.
+//  DailyPrompt.swift
+//  DailyVibe
+//
+//  Created by Daulet Ashikbayev on 27.04.2026.
+//
 
 import Foundation
 
