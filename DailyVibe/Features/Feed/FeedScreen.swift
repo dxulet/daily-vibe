@@ -25,9 +25,10 @@ struct FeedScreen: View {
                 tabToggleRow
                     .padding(.top, 12)
 
-                if vm.isLoading {
-                    Spacer()
-                } else {
+                // Always-rendered subtree — opacity-keyed on isLoading preserves view
+                // identity through the 200ms recording flash (matches the marker-overlay
+                // and MatchToggleRow patterns: "modifiers over conditional views").
+                VStack(spacing: 0) {
                     DailyVibeStrip(
                         prompt: vm.todayPrompt,
                         matchedFriends: vm.matchedFriends,
@@ -46,6 +47,7 @@ struct FeedScreen: View {
                         .padding(.bottom, 100)
                     }
                 }
+                .opacity(vm.isLoading ? 0 : 1)
             }
         }
         .overlay(alignment: .bottom) {
