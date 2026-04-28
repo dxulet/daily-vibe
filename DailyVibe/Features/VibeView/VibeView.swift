@@ -99,8 +99,11 @@ struct VibeView: View {
             showMarker: post.isVibeMatched,
             aspect: 1
         )
-        .clipShape(.rect(cornerRadius: 12))
         .overlay(alignment: .bottom) {
+            // Scrim is the only surface that needs the rounded clip — DualCameraPhoto
+            // already clips its body internally; re-imposing an outer clip on the cell
+            // would re-clip the marker overlay sibling and break POLI-07's spring-overshoot
+            // bleed contract.
             LinearGradient(
                 colors: [.black.opacity(0.0), .black.opacity(0.6)],
                 startPoint: .center,
