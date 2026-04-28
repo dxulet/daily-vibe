@@ -17,6 +17,8 @@ struct DailyVibeStrip: View {
     }
 
     var body: some View {
+        // Width is whatever the parent allots — no screen-specific horizontal padding
+        // baked into a Shared component (matches PostCard's contract).
         Button(action: onTap) {
             HStack(spacing: 12) {
                 VibeMarker()
@@ -42,7 +44,6 @@ struct DailyVibeStrip: View {
             .clipShape(.rect(cornerRadius: 16))
         }
         .buttonStyle(.plain)
-        .padding(.horizontal, 16)
     }
 
     private var facePile: some View {

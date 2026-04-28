@@ -34,6 +34,7 @@ struct FeedScreen: View {
                         matchedFriends: vm.matchedFriends,
                         onTap: { path.append(Route.vibeView) }
                     )
+                    .padding(.horizontal, 16)
                     .padding(.top, 12)
 
                     ScrollView {
