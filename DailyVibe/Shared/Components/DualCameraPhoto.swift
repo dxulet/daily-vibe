@@ -47,9 +47,10 @@ struct DualCameraPhoto: View {
     }
 
     var body: some View {
-        // Aspect baked in — every DualCameraPhoto is 3:4, regardless of source image dimensions.
-        // Callers no longer need to set .aspectRatio externally; that was producing inconsistent
-        // crops when source aspect varied (square vs portrait vs landscape).
+        // Aspect ratio is caller-driven via the `aspect:` parameter to support both
+        // 3:4 (PostCard, PostConfirm, PostDetail) and 1:1 (VibeView grid) contexts.
+        // Setting .aspectRatio inside the component owns the contract end-to-end so
+        // callers don't double-apply at the call site.
         Color.clear
             .aspectRatio(aspect, contentMode: .fit)
             .overlay {
