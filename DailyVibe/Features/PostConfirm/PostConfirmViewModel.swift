@@ -15,6 +15,8 @@ final class PostConfirmViewModel: ObservableObject {
     // Binding(get:set:) plumbing.
     @Published var isMatched: Bool = false
 
-    // Eagerly-bound — todayPrompt is a static var (computed) so Date() re-evaluates per access.
-    let prompt: DailyPrompt = MockDataProvider.todayPrompt
+    // Computed — todayPrompt is a static var (computed) so Date() re-evaluates per access.
+    // A `let` would freeze the value at VM init and contradict that intent (the prompt
+    // would never roll over at midnight for a long-lived screen).
+    var prompt: DailyPrompt { MockDataProvider.todayPrompt }
 }
