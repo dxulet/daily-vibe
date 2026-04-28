@@ -90,6 +90,7 @@ struct FeedScreen: View {
             Image(systemName: "person.2")
                 .font(.system(size: 22))
                 .foregroundStyle(.white)
+                .accessibilityLabel("Friends")
 
             Spacer()
 
@@ -97,6 +98,7 @@ struct FeedScreen: View {
                 Image(systemName: "calendar")
                     .font(.system(size: 20))
                     .foregroundStyle(.white)
+                    .accessibilityLabel("Today")
 
                 Button {
                     onProfileTap()
