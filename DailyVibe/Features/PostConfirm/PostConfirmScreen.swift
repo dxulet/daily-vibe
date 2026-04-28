@@ -81,8 +81,11 @@ struct PostConfirmScreen: View {
 
             Spacer()
 
-            // Invisible balance — keeps Send visually centered against "Retake" on the left.
-            Color.clear.frame(width: 56)
+            // Invisible duplicate of Retake — width tracks the visible button automatically,
+            // so the balance survives localization and Dynamic Type without a magic constant.
+            Button("Retake") { }
+                .font(.system(size: 14))
+                .hidden()
         }
         .padding(.horizontal, 24)
         .padding(.bottom, 24)
