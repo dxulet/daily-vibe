@@ -108,6 +108,7 @@ struct PostConfirmScreen: View {
             }
         }
         .buttonStyle(PressableButtonStyle())
+        .accessibilityLabel("Send")
     }
 
     // POST-01: chevron-down close on topBarLeading. NO PressableButtonStyle (text/icon
@@ -120,6 +121,7 @@ struct PostConfirmScreen: View {
                 .font(.system(size: 18, weight: .semibold))
                 .foregroundStyle(.white)
         }
+        .accessibilityLabel("Close")
     }
 }
 
