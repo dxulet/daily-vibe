@@ -1,8 +1,3 @@
-//
-//  AssetImage.swift
-//  DailyVibe
-//
-
 import SwiftUI
 import UIKit
 

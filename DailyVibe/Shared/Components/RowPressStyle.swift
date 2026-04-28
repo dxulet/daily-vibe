@@ -1,10 +1,3 @@
-//
-//  RowPressStyle.swift
-//  DailyVibe
-//
-//  Created by Daulet Ashikbayev on 27.04.2026.
-//
-
 import SwiftUI
 
 /// Row-level press feedback for the MatchToggleRow — the one gesture the reviewer

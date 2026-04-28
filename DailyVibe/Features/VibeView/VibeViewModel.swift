@@ -1,10 +1,3 @@
-//
-//  VibeViewModel.swift
-//  DailyVibe
-//
-//  Created by Daulet Ashikbayev on 27.04.2026.
-//
-
 import Combine
 import Foundation
 import SwiftUI
