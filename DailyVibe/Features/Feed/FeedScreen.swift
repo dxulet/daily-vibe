@@ -142,6 +142,10 @@ struct FeedScreen: View {
                     .frame(width: 60, height: 60)
             }
             .shadow(color: .black.opacity(0.5), radius: 8, y: 2)
+            // 88pt hit frame > 72pt visual gives ~8pt thumb-forgiveness past
+            // the visible ring. Visual stays centered (the ZStack content hugs
+            // its 72pt size; the larger frame just expands the hit region).
+            .frame(width: 88, height: 88)
             .contentShape(Circle())
         }
         .buttonStyle(PressableButtonStyle())
