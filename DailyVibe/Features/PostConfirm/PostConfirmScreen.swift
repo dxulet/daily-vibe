@@ -25,7 +25,6 @@ struct PostConfirmScreen: View {
                     selfieAsset: "selfie_capture",
                     showMarker: vm.isMatched
                 )
-                .padding(.top, 120)
 
                 // POST-03: caption row, display only — no TextField, no editing surface.
                 Text("Add a caption...")
