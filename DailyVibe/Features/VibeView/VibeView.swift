@@ -60,13 +60,12 @@ struct VibeView: View {
     // MARK: - Prompt card (VIBE-02)
 
     private func promptCard(_ prompt: DailyPrompt) -> some View {
+        // The prompt itself lives on the toolbar principal item — rendering it here too
+        // produced two copies of the same string ~80pt apart on screen.
         VStack(alignment: .leading, spacing: 8) {
             Text("Vibe #\(prompt.editionNumber)")
                 .font(.system(size: 12))
                 .foregroundStyle(Color.vibeSecondaryText)
-            Text(prompt.promptText)
-                .font(.system(size: 28, weight: .bold))
-                .foregroundStyle(.white)
             Text("\(prompt.matchedFriendsCount) friends matched today")
                 .font(.system(size: 13))
                 .foregroundStyle(Color.vibeSecondaryText)
