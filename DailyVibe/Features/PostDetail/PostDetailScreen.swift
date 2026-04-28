@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct PostDetailScreen: View {
+    // DETL-01: zero-VM lock — only @Environment(\.dismiss) is permitted here.
+    // Custom chevron suppresses the system back-button label inheritance
+    // ("today's vibe" from VibeView's principal toolbar) which would collide
+    // with the heavy "[username]'s BeReal." principal title during push.
+    @Environment(\.dismiss) private var dismiss
     let post: Post
 
     var body: some View {
@@ -42,7 +47,16 @@ struct PostDetailScreen: View {
                 .padding(.horizontal, 16)
             }
         }
+        .navigationBarBackButtonHidden(true)
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button { dismiss() } label: {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(.white)
+                }
+                .accessibilityLabel("Back")
+            }
             ToolbarItem(placement: .principal) {
                 HStack(spacing: 0) {
                     Text("\(post.author.username)'s ")
