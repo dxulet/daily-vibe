@@ -16,6 +16,16 @@ enum MockDataProvider {
         Friend(id: UUID(), username: "jen",     initials: "J", avatarColor: .orange),
     ]
 
+    // Synthetic current-user Friend for surfaces that render a "you" avatar
+    // (e.g., FeedScreen's top-right profile circle). avatarColor is the muted
+    // purple per Plan 03-01 decision (vibeAvatarMuted reserved for the user's chip).
+    static let currentUser = Friend(
+        id: UUID(),
+        username: "you",
+        initials: "Y",
+        avatarColor: .vibeAvatarMuted
+    )
+
     static var todayPrompt: DailyPrompt {
         DailyPrompt(
             editionNumber: 247,

@@ -101,27 +101,16 @@ struct FeedScreen: View {
                 Button {
                     onProfileTap()
                 } label: {
-                    profileCircle
+                    Avatar(friend: MockDataProvider.currentUser, size: 32)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Profile")
             }
         }
         .frame(maxWidth: .infinity)
         .overlay {
             WordmarkHeader()
         }
-    }
-
-    // FEED-08: profile circle with literal "Y" initial, vibeAvatarMuted fill, white stroke.
-    private var profileCircle: some View {
-        ZStack {
-            Circle().fill(Color.vibeAvatarMuted)
-            Text("Y")
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(.white)
-        }
-        .frame(width: 32, height: 32)
-        .overlay(Circle().stroke(.white, lineWidth: 1.5))
     }
 
     // FEED-02: tab toggle row — purely visual, no tap behavior, no separator.
