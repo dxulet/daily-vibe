@@ -48,6 +48,7 @@ struct PostConfirmScreen: View {
                 bottomActionRow
             }
         }
+        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) { closeButton }
             ToolbarItem(placement: .principal) { WordmarkHeader() }
