@@ -74,12 +74,14 @@ struct DualCameraPhoto: View {
                 // Marker overlay — ALWAYS rendered. Visibility controlled by scaleEffect + opacity.
                 // Single .animation(_:value:) modifier applied LAST in the chain (POLI-01).
                 // NEVER wrap this in a conditional branch on the flag — that destroys view identity and breaks the spring.
+                // Decorative — surrounding context (MatchToggleRow / vibe-matched grid) carries the semantic meaning.
                 VibeMarker()
                     .font(.system(size: 28, weight: .bold))
                     .scaleEffect(showMarker ? 1 : 0)
                     .opacity(showMarker ? 1 : 0)
                     .padding(.trailing, 12)
                     .padding(.bottom, 12)
+                    .accessibilityHidden(true)
                     .animation(.spring(response: 0.4, dampingFraction: 0.65), value: showMarker)
             }
     }
