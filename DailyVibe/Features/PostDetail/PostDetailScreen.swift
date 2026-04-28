@@ -65,11 +65,13 @@ struct PostDetailScreen: View {
                     .foregroundStyle(.white)
             }
             ToolbarItem(placement: .topBarTrailing) {
+                // Decorative ellipsis — no Button, no tap action. Hidden from VoiceOver
+                // so it doesn't announce as an interactive element.
                 Image(systemName: "ellipsis")
                     .font(.system(size: 18))
                     .foregroundStyle(.white)
                     .frame(width: 40, height: 40)
-                    .contentShape(Rectangle())
+                    .accessibilityHidden(true)
             }
         }
         .vibeToolbarStyling()
