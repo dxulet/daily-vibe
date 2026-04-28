@@ -30,6 +30,7 @@ struct SettingsScreen: View {
                     Button("Done") { dismiss() }
                 }
             }
+            .vibeToolbarStyling()
         }
         .presentationDetents([.large])
         .interactiveDismissDisabled()
