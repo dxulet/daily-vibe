@@ -121,6 +121,5 @@ struct VibeView: View {
                     .padding(.bottom, 6)
             }
         }
-        .contentShape(Rectangle())
     }
 }
