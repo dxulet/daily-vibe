@@ -12,13 +12,7 @@ struct DailyVibeStrip: View {
     let matchedFriends: [Friend]
     let onTap: () -> Void
 
-    private var overflowCount: Int {
-        max(0, prompt.matchedFriendsCount - matchedFriends.count)
-    }
-
     var body: some View {
-        // Width is whatever the parent allots — no screen-specific horizontal padding
-        // baked into a Shared component (matches PostCard's contract).
         Button(action: onTap) {
             HStack(spacing: 12) {
                 VibeMarker()
@@ -47,24 +41,23 @@ struct DailyVibeStrip: View {
     }
 
     private var facePile: some View {
-        HStack(spacing: -10) {
+        let overflowCount = prompt.overflowCount(visibleCount: matchedFriends.count)
+        return HStack(spacing: -10) {
             ForEach(matchedFriends.prefix(4)) { friend in
                 Avatar(friend: friend)
             }
             if overflowCount > 0 {
-                overflowAvatar
+                overflowAvatar(count: overflowCount)
             }
         }
     }
 
-    // 5th avatar-shaped circle — same 28pt size, same border, distinct fill + text.
-    // Reads as "more, contained" rather than as a specific person.
-    private var overflowAvatar: some View {
+    private func overflowAvatar(count: Int) -> some View {
         Circle()
             .fill(Color.vibeSurfaceElevated)
             .frame(width: 28, height: 28)
             .overlay(
-                Text("+\(overflowCount)")
+                Text("+\(count)")
                     .font(.system(size: 11, weight: .semibold))
                     .monospacedDigit()
                     .foregroundStyle(Color.vibeSecondaryText)
