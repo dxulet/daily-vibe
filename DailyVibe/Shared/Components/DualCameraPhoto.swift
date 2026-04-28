@@ -13,39 +13,6 @@ struct DualCameraPhoto: View {
     let showMarker: Bool
     var aspect: CGFloat = 3/4  // 3:4 for feed/detail, 1:1 for VibeView grid
 
-    // Asset-agnostic loaders — render the image if it's in the catalog,
-    // otherwise fall back to a tinted placeholder so PostCards stay visible
-    // before real photo assets are dropped into Assets.xcassets.
-    private var rearImage: some View {
-        ZStack {
-            Color(white: 0.18)
-            if UIImage(named: rearAsset) != nil {
-                Image(rearAsset)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } else {
-                Image(systemName: "photo")
-                    .font(.system(size: 36))
-                    .foregroundStyle(.white.opacity(0.25))
-            }
-        }
-    }
-
-    private var selfieImage: some View {
-        ZStack {
-            Color(white: 0.28)
-            if UIImage(named: selfieAsset) != nil {
-                Image(selfieAsset)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } else {
-                Image(systemName: "person.fill")
-                    .font(.system(size: 24))
-                    .foregroundStyle(.white.opacity(0.35))
-            }
-        }
-    }
-
     var body: some View {
         // Aspect ratio is caller-driven via the `aspect:` parameter to support both
         // 3:4 (PostCard, PostConfirm, PostDetail) and 1:1 (VibeView grid) contexts.
@@ -54,20 +21,28 @@ struct DualCameraPhoto: View {
         Color.clear
             .aspectRatio(aspect, contentMode: .fit)
             .overlay {
-                rearImage
-                    .clipped()
+                AssetImage(assetName: rearAsset, backgroundColor: Color(white: 0.18)) {
+                    Image(systemName: "photo")
+                        .font(.system(size: 36))
+                        .foregroundStyle(.white.opacity(0.25))
+                }
+                .clipped()
             }
             .overlay(alignment: .topLeading) {
-                selfieImage
-                    .frame(width: 96, height: 128)
-                    .clipShape(.rect(cornerRadius: 12))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(.white, lineWidth: 2.5)
-                    )
-                    .shadow(color: .black.opacity(0.4), radius: 4, x: 0, y: 1.5)
-                    .padding(.top, 12)
-                    .padding(.leading, 12)
+                AssetImage(assetName: selfieAsset, backgroundColor: Color(white: 0.28)) {
+                    Image(systemName: "person.fill")
+                        .font(.system(size: 24))
+                        .foregroundStyle(.white.opacity(0.35))
+                }
+                .frame(width: 96, height: 128)
+                .clipShape(.rect(cornerRadius: 12))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(.white, lineWidth: 2.5)
+                )
+                .shadow(color: .black.opacity(0.4), radius: 4, x: 0, y: 1.5)
+                .padding(.top, 12)
+                .padding(.leading, 12)
             }
             .clipShape(.rect(cornerRadius: 12))
             .overlay(alignment: .bottomTrailing) {
