@@ -58,14 +58,11 @@ struct PostDetailScreen: View {
                 .accessibilityLabel("Back")
             }
             ToolbarItem(placement: .principal) {
-                HStack(spacing: 0) {
-                    Text("\(post.author.username)'s ")
-                        .font(.system(size: 17, weight: .heavy))
-                        .foregroundStyle(.white)
-                    Text("BeReal.")
-                        .font(.system(size: 17, weight: .heavy))
-                        .foregroundStyle(.white)
-                }
+                // Single-Text interpolation so iOS truncates as "username's…" instead of
+                // the two-Text HStack's "username's Be…" guillotine cut on long usernames.
+                Text("\(post.author.username)'s BeReal.")
+                    .font(.system(size: 17, weight: .heavy))
+                    .foregroundStyle(.white)
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Image(systemName: "ellipsis")
