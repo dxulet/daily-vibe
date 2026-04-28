@@ -25,7 +25,6 @@ struct PostConfirmScreen: View {
                     selfieAsset: "selfie_capture",
                     showMarker: vm.isMatched
                 )
-                .aspectRatio(3/4, contentMode: .fit)
                 .padding(.top, 120)
 
                 // POST-03: caption row, display only — no TextField, no editing surface.

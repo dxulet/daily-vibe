@@ -22,7 +22,6 @@ struct PostDetailScreen: View {
                         selfieAsset: post.selfiePhotoAsset,
                         showMarker: post.isVibeMatched
                     )
-                    .aspectRatio(3/4, contentMode: .fit)
 
                     // b. todayVibeChip (DETL-04) — yellow lives ONLY on the ✦ glyph.
                     todayVibeChip

@@ -18,7 +18,6 @@ struct PostCard: View {
                 selfieAsset: post.selfiePhotoAsset,
                 showMarker: post.isVibeMatched
             )
-            .aspectRatio(3/4, contentMode: .fit)
         }
     }
 }

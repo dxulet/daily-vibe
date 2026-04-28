@@ -19,7 +19,11 @@ struct FeedScreen: View {
 
             VStack(spacing: 0) {
                 topBar
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
+
                 tabToggleRow
+                    .padding(.top, 12)
 
                 if vm.isLoading {
                     Spacer()
@@ -32,17 +36,40 @@ struct FeedScreen: View {
                     .padding(.top, 12)
 
                     ScrollView {
-                        VStack(spacing: 16) {
+                        LazyVStack(spacing: 16) {
                             ForEach(vm.posts) { post in
                                 PostCard(post: post)
                             }
                         }
                         .padding(.top, 16)
                         .padding(.horizontal, 16)
-                        .padding(.bottom, 120)
+                        .padding(.bottom, 100)
                     }
                 }
             }
+        }
+        .overlay(alignment: .bottom) {
+            // Scrim anchored to the literal SCREEN bottom (past the home indicator).
+            // VStack with a Spacer above the gradient lets the gradient size itself to
+            // its natural 240pt and stick to the bottom of a full-screen frame that
+            // ignores the safe area — so the darkest stop lands at the screen edge,
+            // not at the safe-area inset.
+            VStack(spacing: 0) {
+                Spacer(minLength: 0)
+                LinearGradient(
+                    stops: [
+                        .init(color: .clear,                              location: 0.0),
+                        .init(color: Color.vibeBackground.opacity(0.4),   location: 0.4),
+                        .init(color: Color.vibeBackground.opacity(0.85),  location: 0.75),
+                        .init(color: Color.vibeBackground.opacity(0.95),  location: 1.0),
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: 240)
+            }
+            .allowsHitTesting(false)
+            .ignoresSafeArea(edges: .bottom)
         }
         .overlay(alignment: .bottom) {
             shutterButton
@@ -52,36 +79,34 @@ struct FeedScreen: View {
         .task { await vm.load() }
     }
 
-    // FEED-01: top bar — friends icon + WordmarkHeader + calendar + profile circle.
+    // FEED-01: top bar — friends icon (left) + WordmarkHeader (center) + calendar + profile (right).
+    // Use overlay-centered WordmarkHeader so the side clusters can size naturally without
+    // unbounded Spacers fighting the centered title for width.
     private var topBar: some View {
         HStack(spacing: 0) {
             Image(systemName: "person.2")
-                .font(.system(size: 24))
-                .foregroundStyle(.white)
-
-            Spacer()
-
-            WordmarkHeader()
-
-            Spacer()
-
-            Image(systemName: "calendar")
                 .font(.system(size: 22))
                 .foregroundStyle(.white)
 
-            Spacer().frame(width: 12)
+            Spacer()
 
-            Button {
-                onProfileTap()
-            } label: {
-                profileCircle
+            HStack(spacing: 12) {
+                Image(systemName: "calendar")
+                    .font(.system(size: 20))
+                    .foregroundStyle(.white)
+
+                Button {
+                    onProfileTap()
+                } label: {
+                    profileCircle
+                }
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
-            .frame(width: 40, height: 40)
-            .contentShape(Rectangle())
         }
-        .padding(.horizontal, 16)
-        .padding(.top, 8)
+        .frame(maxWidth: .infinity)
+        .overlay {
+            WordmarkHeader()
+        }
     }
 
     // FEED-08: profile circle with literal "Y" initial, vibeAvatarMuted fill, white stroke.
@@ -107,17 +132,25 @@ struct FeedScreen: View {
                 .foregroundStyle(Color.vibeSecondaryText)
         }
         .frame(maxWidth: .infinity)
-        .padding(.top, 8)
     }
 
-    // FEED-07: shutter — stroked white ring (NOT filled), PressableButtonStyle hero scope.
+    // FEED-07: hero shutter floats on the gradient scrim — white ring + filled disc.
+    // Tight shadow earns elevation without bleeding into a hard opacity wall (the scrim
+    // never reaches 1.0 at bottom, so the shadow has room to dissipate).
     private var shutterButton: some View {
         Button {
             path.append(Route.postConfirm)
         } label: {
-            Circle()
-                .stroke(.white, lineWidth: 3)
-                .frame(width: 76, height: 76)
+            ZStack {
+                Circle()
+                    .stroke(.white, lineWidth: 4)
+                    .frame(width: 72, height: 72)
+                Circle()
+                    .fill(.white)
+                    .frame(width: 60, height: 60)
+            }
+            .shadow(color: .black.opacity(0.5), radius: 8, y: 2)
+            .contentShape(Circle())
         }
         .buttonStyle(PressableButtonStyle())
     }

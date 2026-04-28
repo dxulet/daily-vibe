@@ -96,9 +96,9 @@ struct VibeView: View {
         DualCameraPhoto(
             rearAsset: post.rearPhotoAsset,
             selfieAsset: post.selfiePhotoAsset,
-            showMarker: post.isVibeMatched
+            showMarker: post.isVibeMatched,
+            aspect: 1
         )
-        .aspectRatio(1, contentMode: .fit)
         .clipShape(.rect(cornerRadius: 12))
         .overlay(alignment: .bottom) {
             LinearGradient(
