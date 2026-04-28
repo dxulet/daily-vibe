@@ -8,16 +8,37 @@
 import SwiftUI
 
 struct SettingsScreen: View {
+    @StateObject private var vm = SettingsViewModel()
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
-        VStack(spacing: 16) {
-            Text("Settings")
-                .font(.largeTitle.bold())
-                .foregroundStyle(.white)
-            Text("placeholder")
-                .font(.vibeAccentLowercase)
-                .foregroundStyle(Color.vibeSecondaryText)
+        NavigationStack {
+            List {
+                Section {
+                    Toggle("Show Daily Vibe prompts", isOn: $vm.isVibeEnabled)
+                } footer: {
+                    Text("When off, you won't see the daily theme on your notification or feed.")
+                }
+            }
+            .listStyle(.insetGrouped)
+            .scrollContentBackground(.hidden)
+            .background(Color.vibeBackground)
+            .navigationTitle("Daily Vibe")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { dismiss() }
+                }
+            }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.vibeBackground)
+        .presentationDetents([.large])
+        .interactiveDismissDisabled()
     }
+}
+
+#Preview {
+    Color.gray.sheet(isPresented: .constant(true)) {
+        SettingsScreen()
+    }
+    .preferredColorScheme(.dark)
 }
