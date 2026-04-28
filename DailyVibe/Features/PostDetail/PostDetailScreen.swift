@@ -103,3 +103,10 @@ struct PostDetailScreen: View {
         }
     }
 }
+
+#Preview {
+    NavigationStack {
+        PostDetailScreen(post: MockDataProvider.feedPosts.first!)
+    }
+    .preferredColorScheme(.dark)
+}
