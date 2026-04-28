@@ -13,18 +13,81 @@ struct PostDetailScreen: View {
     var body: some View {
         ZStack {
             Color.vibeBackground.ignoresSafeArea()
-            VStack(spacing: 8) {
-                Text("PostDetail")
-                    .font(.largeTitle.bold())
-                    .foregroundStyle(.white)
-                Text("@\(post.author.username) — \(post.timestampText)")
-                    .font(.vibeAccentLowercase)
-                    .foregroundStyle(Color.vibeSecondaryText)
-                Text(post.isVibeMatched ? "matched" : "not matched")
-                    .font(.vibeBody)
-                    .foregroundStyle(post.isVibeMatched ? Color.vibeAccent : Color.vibeSecondaryText)
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: 12) {
+                    // a. DualCameraPhoto (DETL-03) — marker visibility from post.isVibeMatched (always-rendered, POLI-07).
+                    DualCameraPhoto(
+                        rearAsset: post.rearPhotoAsset,
+                        selfieAsset: post.selfiePhotoAsset,
+                        showMarker: post.isVibeMatched
+                    )
+                    .aspectRatio(3/4, contentMode: .fit)
+
+                    // b. todayVibeChip (DETL-04) — yellow lives ONLY on the ✦ glyph.
+                    todayVibeChip
+
+                    // c. Caption (DETL-05) — hardcoded literal placeholder; Post model has no caption field.
+                    Text("today felt right.")
+                        .font(.vibeBody)
+                        .foregroundStyle(.white)
+
+                    // d. realMojiRow (DETL-06) — 3 grey placeholder circles, no interaction.
+                    realMojiRow
+
+                    // e. 0 comments text (DETL-07) — quiet, no composer.
+                    Text("0 comments")
+                        .font(.vibeAccentLowercase)
+                        .foregroundStyle(Color.vibeSecondaryText)
+                }
+                .padding(.horizontal, 16)
             }
         }
-        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                HStack(spacing: 0) {
+                    Text("\(post.author.username)'s ")
+                        .font(.system(size: 17, weight: .heavy))
+                        .foregroundStyle(.white)
+                    Text("BeReal.")
+                        .font(.system(size: 17, weight: .heavy))
+                        .foregroundStyle(.white)
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Image(systemName: "ellipsis")
+                    .font(.system(size: 18))
+                    .foregroundStyle(.white)
+                    .frame(width: 40, height: 40)
+                    .contentShape(Rectangle())
+            }
+        }
+        .vibeToolbarStyling()
+    }
+
+    // MARK: - Today's Vibe chip (DETL-04)
+
+    private var todayVibeChip: some View {
+        HStack(spacing: 0) {
+            Text("✦").foregroundStyle(Color.vibeAccent)
+            Text(" today's vibe").foregroundStyle(.white)
+        }
+        .font(.system(size: 12))
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(Color.vibeSurface)
+        .clipShape(.rect(cornerRadius: 12))
+    }
+
+    // MARK: - RealMoji row (DETL-06)
+
+    private var realMojiRow: some View {
+        HStack(spacing: 8) {
+            ForEach(0..<3) { _ in
+                Circle()
+                    .fill(Color.vibeSurfaceElevated)
+                    .frame(width: 32, height: 32)
+            }
+        }
     }
 }
