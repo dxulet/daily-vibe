@@ -82,10 +82,10 @@ struct PostDetailScreen: View {
 
     private var todayVibeChip: some View {
         HStack(spacing: 0) {
-            Text("✦").foregroundStyle(Color.vibeAccent)
+            VibeMarker()
             Text(" today's vibe").foregroundStyle(.white)
         }
-        .font(.system(size: 12))
+        .font(.system(size: 12, weight: .bold))
         .padding(.horizontal, 10)
         .padding(.vertical, 6)
         .background(Color.vibeSurface)
