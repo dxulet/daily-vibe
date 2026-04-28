@@ -26,7 +26,7 @@ struct DailyVibeStrip: View {
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text("today's vibe")
-                        .font(.vibeAccentLowercase)
+                        .font(.vibeLowercaseLabel)
                         .foregroundStyle(Color.vibeSecondaryText)
                     Text(prompt.promptText)
                         .font(.vibeUsername)

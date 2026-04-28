@@ -36,7 +36,7 @@ private struct UsernameRow: View {
                     .font(.vibeUsername)
                     .foregroundStyle(.white)
                 Text(timestampText)
-                    .font(.vibeAccentLowercase)
+                    .font(.vibeLowercaseLabel)
                     .foregroundStyle(Color.vibeSecondaryText)
             }
             Spacer(minLength: 0)

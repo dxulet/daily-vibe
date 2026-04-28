@@ -41,7 +41,7 @@ struct PostDetailScreen: View {
 
                     // e. 0 comments text (DETL-07) — quiet, no composer.
                     Text("0 comments")
-                        .font(.vibeAccentLowercase)
+                        .font(.vibeLowercaseLabel)
                         .foregroundStyle(Color.vibeSecondaryText)
                 }
                 .padding(.horizontal, 16)

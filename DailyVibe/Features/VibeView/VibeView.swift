@@ -45,7 +45,7 @@ struct VibeView: View {
             ToolbarItem(placement: .principal) {
                 VStack(spacing: 0) {
                     Text("today's vibe")
-                        .font(.vibeAccentLowercase)
+                        .font(.vibeLowercaseLabel)
                         .foregroundStyle(Color.vibeSecondaryText)
                     Text(vm.prompt.promptText)
                         .font(.vibeUsername)

@@ -22,7 +22,7 @@ struct MatchToggleRow: View {
                         .font(.vibeUsername)
                         .foregroundStyle(.white)
                     Text("today: \(prompt.promptText)")
-                        .font(.vibeAccentLowercase)
+                        .font(.vibeLowercaseLabel)
                         .foregroundStyle(Color.vibeSecondaryText)
                 }
 
@@ -47,7 +47,7 @@ struct MatchToggleRow: View {
         VStack(spacing: 24) {
             MatchToggleRow(prompt: MockDataProvider.todayPrompt, isMatched: $matched)
             Text(matched ? "isMatched: true" : "isMatched: false")
-                .font(.vibeAccentLowercase)
+                .font(.vibeLowercaseLabel)
                 .foregroundStyle(Color.vibeSecondaryText)
         }
         .padding()

@@ -18,7 +18,7 @@ struct EmptyVibeState: View {
                 .foregroundStyle(.white)
 
             Text("match today's vibe to see who else did")
-                .font(.vibeAccentLowercase)
+                .font(.vibeLowercaseLabel)
                 .foregroundStyle(Color.vibeSecondaryText)
                 .multilineTextAlignment(.center)
         }
