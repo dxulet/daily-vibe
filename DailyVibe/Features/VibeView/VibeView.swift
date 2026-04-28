@@ -93,10 +93,14 @@ struct VibeView: View {
     }
 
     private func cell(for post: Post) -> some View {
+        // showMarker: false — the grid IS the vibe-matched surface; per-cell
+        // ✦ markers are redundant noise and previously collided with the
+        // bottom-leading username scrim on the same 16pt edge strip,
+        // muddying the precious yellow accent.
         DualCameraPhoto(
             rearAsset: post.rearPhotoAsset,
             selfieAsset: post.selfiePhotoAsset,
-            showMarker: post.isVibeMatched,
+            showMarker: false,
             aspect: 1
         )
         .overlay(alignment: .bottom) {
