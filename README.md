@@ -1,10 +1,13 @@
+
 # Daily Vibe
 
 A feature concept for BeReal: a globally-shared daily prompt added to the existing daily notification, with an in-app surface to compare how friends interpreted it.
 
 Built as a 4-day take-home for the Founding/Product Engineer role at BeReal.
 
-![Daily Vibe demo](docs/demo.gif)
+![Daily Vibe demo](https://github.com/user-attachments/assets/00b409e0-bf19-4861-a25e-52cc904cb0c0)
+
+
 
 ## Submission contents
 
