@@ -35,9 +35,10 @@ struct DualCameraPhoto: View {
             }
             .clipShape(.rect(cornerRadius: 12))
             .overlay(alignment: .bottomTrailing) {
-                // POLI-07: always-rendered, controlled via scaleEffect/opacity. Never branch this on the flag.
                 VibeMarker()
-                    .font(.system(size: 28, weight: .bold))
+                    .font(.system(size: 20, weight: .bold))
+                    .frame(width: 36, height: 36)
+                    .background(.thinMaterial, in: .circle)
                     .scaleEffect(showMarker ? 1 : 0)
                     .opacity(showMarker ? 1 : 0)
                     .padding(.trailing, 12)
