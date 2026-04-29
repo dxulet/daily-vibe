@@ -37,4 +37,5 @@ struct SettingsScreen: View {
         SettingsScreen()
     }
     .preferredColorScheme(.dark)
+    .previewEnvironments()
 }

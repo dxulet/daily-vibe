@@ -41,4 +41,5 @@ struct FirstRunIntro: View {
         FirstRunIntro()
     }
     .preferredColorScheme(.dark)
+    .previewEnvironments()
 }

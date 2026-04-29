@@ -6,7 +6,8 @@ extension Font {
     static let vibeIntroHeadline = Font.system(size: 22, weight: .heavy)
 
     static let vibeUsername = Font.system(size: 15, weight: .semibold)
-    static let vibeButtonLabel = Font.system(size: 15, weight: .semibold)
+    /// Alias of `vibeUsername` used semantically for primary CTAs.
+    static let vibeButtonLabel = Font.vibeUsername
     static let vibeBody = Font.system(size: 15, weight: .regular)
     static let vibeAction = Font.system(size: 14, weight: .regular)
 

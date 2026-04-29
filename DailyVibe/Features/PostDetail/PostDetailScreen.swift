@@ -89,4 +89,5 @@ struct PostDetailScreen: View {
         PostDetailScreen(post: MockDataProvider.feedPosts.first!)
     }
     .preferredColorScheme(.dark)
+    .previewEnvironments()
 }
