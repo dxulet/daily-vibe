@@ -3,8 +3,8 @@ import SwiftUI
 enum MockDataProvider {
     static let friends: [Friend] = [
         Friend(id: UUID(), username: "marco", initials: "M", avatarColor: .red),
-        Friend(id: UUID(), username: "aigerim", initials: "A", avatarColor: .teal),
-        Friend(id: UUID(), username: "dulat", initials: "D", avatarColor: .yellow),
+        Friend(id: UUID(), username: "daulet", initials: "D", avatarColor: .teal),
+        Friend(id: UUID(), username: "ayagul", initials: "A", avatarColor: .yellow),
         Friend(id: UUID(), username: "sarah", initials: "S", avatarColor: .mint),
         Friend(id: UUID(), username: "jen", initials: "J", avatarColor: .orange),
     ]

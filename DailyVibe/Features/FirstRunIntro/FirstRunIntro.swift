@@ -9,7 +9,7 @@ struct FirstRunIntro: View {
                 .font(.system(size: 60, weight: .bold))
 
             Text("Today, BeReal has a vibe.")
-                .font(.system(size: 22, weight: .heavy))
+                .font(.vibeIntroHeadline)
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
 
@@ -20,13 +20,14 @@ struct FirstRunIntro: View {
 
             Spacer().frame(height: 8)
 
-            Button("Got it") { dismiss() }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .background(.white)
-                .foregroundStyle(.black)
-                .clipShape(.rect(cornerRadius: 14))
-                .font(.vibeBody.weight(.semibold))
+            Button { dismiss() } label: {
+                Text("Got it")
+                    .font(.vibeBody.weight(.semibold))
+                    .foregroundStyle(.black)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(.white, in: .rect(cornerRadius: 14))
+            }
         }
         .padding(.horizontal, 32)
         .frame(maxWidth: .infinity, maxHeight: .infinity)

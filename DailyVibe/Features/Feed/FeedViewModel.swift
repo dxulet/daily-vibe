@@ -1,22 +1,25 @@
-import Combine
 import Foundation
-import SwiftUI
 
+@Observable
 @MainActor
-final class FeedViewModel: ObservableObject {
-    // Eager init from MockDataProvider — load() simulates an async fetch but the
-    // data is already on hand. Reassigning in load() would be redundant work.
-    @Published private(set) var posts: [Post] = MockDataProvider.feedPosts
-    @Published private(set) var todayPrompt: DailyPrompt = MockDataProvider.todayPrompt
-    @Published private(set) var matchedFriends: [Friend] = MockDataProvider.matchedFriendsToday
-    @Published private(set) var isLoading: Bool = false
+final class FeedViewModel {
+    private(set) var posts: [Post] = []
+    private(set) var todayPrompt: DailyPrompt = .placeholder
+    private(set) var matchedFriends: [Friend] = []
+    private(set) var isLoading: Bool = false
 
-    func load() async {
+    func load(repo: any PostRepository) async {
         isLoading = true
         defer { isLoading = false }
 
-        // recording-affordance: visible 200ms loading flash for the 30s screen recording
-        do { try await Task.sleep(for: .milliseconds(200)) }
-        catch { return }
+        async let delay: Void? = try? await Task.sleep(for: .milliseconds(200))
+        async let posts = try? repo.feedPosts()
+        async let prompt = try? repo.todayPrompt()
+        async let matched = try? repo.matchedFriendsToday()
+
+        _ = await delay
+        self.posts = await posts ?? []
+        self.todayPrompt = await prompt ?? .placeholder
+        self.matchedFriends = await matched ?? []
     }
 }

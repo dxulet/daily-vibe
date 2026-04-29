@@ -1,15 +1,13 @@
-import Combine
-import SwiftUI
+import Foundation
 
+@Observable
 @MainActor
-final class PostConfirmViewModel: ObservableObject {
-    // Raw user-input mirror — `@Published var` (no `private(set)`) so MatchToggleRow's
-    // Toggle("", isOn: $vm.isMatched).labelsHidden() binds directly without manual
-    // Binding(get:set:) plumbing.
-    @Published var isMatched: Bool = false
+final class PostConfirmViewModel {
+    var isMatched: Bool = false
 
-    // Computed — todayPrompt is a static var (computed) so Date() re-evaluates per access.
-    // A `let` would freeze the value at VM init and contradict that intent (the prompt
-    // would never roll over at midnight for a long-lived screen).
-    var prompt: DailyPrompt { MockDataProvider.todayPrompt }
+    private(set) var prompt: DailyPrompt = .placeholder
+
+    func load(repo: any PostRepository) async {
+        prompt = (try? await repo.todayPrompt()) ?? .placeholder
+    }
 }

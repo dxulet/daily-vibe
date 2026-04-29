@@ -1,36 +1,36 @@
 import SwiftUI
 
 struct RootRouter: View {
-    @State private var path = NavigationPath()
-
-    // PROTOTYPE: production version gates on @AppStorage("hasSeenIntro")
-    @State private var showFirstRun = true
-
-    @State private var showSettings = false
+    @Environment(\.router) private var router
+    @AppStorage("hasSeenIntro") private var hasSeenIntro = false
 
     var body: some View {
-        NavigationStack(path: $path) {
-            FeedScreen(
-                path: $path,
-                onProfileTap: { showSettings = true }
-            )
-            .navigationDestination(for: Route.self) { route in
-                switch route {
-                case .feed:
-                    FeedScreen(
-                        path: $path,
-                        onProfileTap: { showSettings = true }
-                    )
-                case .postConfirm:
-                    PostConfirmScreen(path: $path)
-                case .vibeView:
-                    VibeView(path: $path)
-                case .postDetail(let post):
-                    PostDetailScreen(post: post)
+        @Bindable var router = router
+
+        return NavigationStack(path: $router.path) {
+            FeedScreen()
+                .navigationDestination(for: Route.self) { route in
+                    switch route {
+                    case .postConfirm:
+                        PostConfirmScreen()
+                    case .vibeView:
+                        VibeView()
+                    case .postDetail(let post):
+                        PostDetailScreen(post: post)
+                    }
                 }
+        }
+        .sheet(item: $router.sheet) { sheet in
+            switch sheet {
+            case .firstRun:
+                FirstRunIntro()
+                    .onDisappear { hasSeenIntro = true }
+            case .settings:
+                SettingsScreen()
             }
         }
-        .sheet(isPresented: $showFirstRun) { FirstRunIntro() }
-        .sheet(isPresented: $showSettings) { SettingsScreen() }
+        .task {
+            if !hasSeenIntro { router.openFirstRun() }
+        }
     }
 }

@@ -1,11 +1,14 @@
 import SwiftUI
 
 struct PostConfirmScreen: View {
-    @Binding var path: NavigationPath
-    @StateObject private var vm = PostConfirmViewModel()
+    @Environment(\.router) private var router
+    @Environment(\.postRepository) private var repo
+    @State private var vm = PostConfirmViewModel()
 
     var body: some View {
-        ZStack {
+        @Bindable var vm = vm
+
+        return ZStack {
             Color.vibeBackground.ignoresSafeArea()
 
             VStack(spacing: 16) {
@@ -38,6 +41,7 @@ struct PostConfirmScreen: View {
             ToolbarItem(placement: .principal) { WordmarkHeader() }
         }
         .vibeToolbarStyling()
+        .task { await vm.load(repo: repo) }
     }
 
     // MARK: - Audience selector
@@ -47,7 +51,7 @@ struct PostConfirmScreen: View {
             Text("My Friends")
             Image(systemName: "chevron.down")
         }
-        .font(.system(size: 14))
+        .font(.vibeAction)
         .foregroundStyle(Color.vibeSecondaryText)
     }
 
@@ -56,9 +60,9 @@ struct PostConfirmScreen: View {
     private var bottomActionRow: some View {
         HStack {
             Button("Retake") {
-                path.removeLast()
+                router.pop()
             }
-            .font(.system(size: 14))
+            .font(.vibeAction)
             .foregroundStyle(.white)
 
             Spacer()
@@ -67,10 +71,8 @@ struct PostConfirmScreen: View {
 
             Spacer()
 
-            // Invisible Retake duplicate balances the row; width auto-tracks under
-            // localization and Dynamic Type without a magic constant.
             Button("Retake") { }
-                .font(.system(size: 14))
+                .font(.vibeAction)
                 .hidden()
         }
         .padding(.horizontal, 24)
@@ -81,7 +83,7 @@ struct PostConfirmScreen: View {
 
     private var sendButton: some View {
         Button {
-            path.removeLast()
+            router.pop()
         } label: {
             ZStack {
                 Circle()
@@ -100,7 +102,7 @@ struct PostConfirmScreen: View {
 
     private var closeButton: some View {
         Button {
-            path.removeLast()
+            router.pop()
         } label: {
             Image(systemName: "chevron.down")
                 .font(.system(size: 18, weight: .semibold))
@@ -112,7 +114,7 @@ struct PostConfirmScreen: View {
 
 #Preview {
     NavigationStack {
-        PostConfirmScreen(path: .constant(NavigationPath()))
+        PostConfirmScreen()
     }
     .preferredColorScheme(.dark)
 }

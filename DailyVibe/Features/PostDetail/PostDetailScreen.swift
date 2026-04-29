@@ -42,10 +42,8 @@ struct PostDetailScreen: View {
                 .accessibilityLabel("Back")
             }
             ToolbarItem(placement: .principal) {
-                // Single-Text interpolation truncates as "username's…" instead of
-                // the two-Text HStack's "username's Be…" guillotine cut.
                 Text("\(post.author.username)'s BeReal.")
-                    .font(.system(size: 17, weight: .heavy))
+                    .font(.vibeToolbarTitle)
                     .foregroundStyle(.white)
             }
             ToolbarItem(placement: .topBarTrailing) {
@@ -66,7 +64,7 @@ struct PostDetailScreen: View {
             VibeMarker()
             Text(" today's vibe").foregroundStyle(.white)
         }
-        .font(.system(size: 12, weight: .bold))
+        .font(.vibeChipLabel)
         .padding(.horizontal, 10)
         .padding(.vertical, 6)
         .background(Color.vibeSurface)

@@ -1,8 +1,9 @@
 import SwiftUI
 
 struct VibeView: View {
-    @Binding var path: NavigationPath
-    @StateObject private var vm = VibeViewModel()
+    @Environment(\.router) private var router
+    @Environment(\.postRepository) private var repo
+    @State private var vm = VibeViewModel()
 
     private let columns = [
         GridItem(.flexible(), spacing: 12),
@@ -43,19 +44,18 @@ struct VibeView: View {
             }
         }
         .vibeToolbarStyling()
-        .task { await vm.load() }
+        .task { await vm.load(repo: repo) }
     }
 
     // MARK: - Prompt card
 
     private func promptCard(_ prompt: DailyPrompt) -> some View {
-        // Prompt text lives on the toolbar principal item; this card carries metadata only.
         VStack(alignment: .leading, spacing: 8) {
             Text("Vibe #\(prompt.editionNumber)")
-                .font(.system(size: 12))
+                .font(.vibeMetaLabel)
                 .foregroundStyle(Color.vibeSecondaryText)
             Text("\(prompt.matchedFriendsCount) friends matched today")
-                .font(.system(size: 13))
+                .font(.vibeLowercaseLabel)
                 .foregroundStyle(Color.vibeSecondaryText)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -70,7 +70,7 @@ struct VibeView: View {
         LazyVGrid(columns: columns, spacing: 12) {
             ForEach(vm.matchedPosts) { post in
                 Button {
-                    path.append(Route.postDetail(post))
+                    router.push(.postDetail(post))
                 } label: {
                     cell(for: post)
                 }
@@ -80,8 +80,6 @@ struct VibeView: View {
     }
 
     private func cell(for post: Post) -> some View {
-        // showMarker: false — the grid itself is the vibe-matched surface; per-cell
-        // markers would collide with the bottom-leading username scrim.
         DualCameraPhoto(
             rearAsset: post.rearPhotoAsset,
             selfieAsset: post.selfiePhotoAsset,
@@ -89,8 +87,6 @@ struct VibeView: View {
             aspect: 1
         )
         .overlay(alignment: .bottom) {
-            // Clip lives on the scrim only — re-clipping the cell would re-clip the
-            // marker sibling and break POLI-07's spring-overshoot bleed.
             LinearGradient(
                 colors: [.black.opacity(0.0), .black.opacity(0.6)],
                 startPoint: .center,
@@ -99,7 +95,7 @@ struct VibeView: View {
             .clipShape(.rect(cornerRadius: 12))
             .overlay(alignment: .bottomLeading) {
                 Text(post.author.username)
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.vibeGridUsername)
                     .foregroundStyle(.white)
                     .padding(.horizontal, 8)
                     .padding(.bottom, 6)

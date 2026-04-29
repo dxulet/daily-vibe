@@ -1,11 +1,13 @@
 import SwiftUI
 
 struct SettingsScreen: View {
-    @StateObject private var vm = SettingsViewModel()
+    @State private var vm = SettingsViewModel()
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        NavigationStack {
+        @Bindable var vm = vm
+
+        return NavigationStack {
             List {
                 Section {
                     Toggle("Show Daily Vibe prompts", isOn: $vm.isVibeEnabled)
