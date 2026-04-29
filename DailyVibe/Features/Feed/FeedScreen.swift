@@ -70,6 +70,8 @@ struct FeedScreen: View {
         .task { await vm.load() }
     }
 
+    // MARK: - Top bar
+
     private var topBar: some View {
         HStack(spacing: 0) {
             Image(systemName: "person.2")
@@ -100,6 +102,8 @@ struct FeedScreen: View {
         }
     }
 
+    // MARK: - Tab toggle
+
     private var tabToggleRow: some View {
         HStack(spacing: 24) {
             Text("My Friends")
@@ -111,6 +115,8 @@ struct FeedScreen: View {
         }
         .frame(maxWidth: .infinity)
     }
+
+    // MARK: - Shutter button
 
     private var shutterButton: some View {
         Button {

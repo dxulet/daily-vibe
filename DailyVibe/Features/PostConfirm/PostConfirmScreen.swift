@@ -40,6 +40,8 @@ struct PostConfirmScreen: View {
         .vibeToolbarStyling()
     }
 
+    // MARK: - Audience selector
+
     private var audienceSelector: some View {
         HStack(spacing: 4) {
             Text("My Friends")
@@ -48,6 +50,8 @@ struct PostConfirmScreen: View {
         .font(.system(size: 14))
         .foregroundStyle(Color.vibeSecondaryText)
     }
+
+    // MARK: - Bottom action row
 
     private var bottomActionRow: some View {
         HStack {
@@ -73,6 +77,8 @@ struct PostConfirmScreen: View {
         .padding(.bottom, 24)
     }
 
+    // MARK: - Send button
+
     private var sendButton: some View {
         Button {
             path.removeLast()
@@ -89,6 +95,8 @@ struct PostConfirmScreen: View {
         .buttonStyle(PressableButtonStyle())
         .accessibilityLabel("Send")
     }
+
+    // MARK: - Close button
 
     private var closeButton: some View {
         Button {

@@ -33,6 +33,8 @@ struct DailyVibeStrip: View {
         .buttonStyle(.plain)
     }
 
+    // MARK: - Face pile
+
     private var facePile: some View {
         let overflowCount = prompt.overflowCount(visibleCount: matchedFriends.count)
         return HStack(spacing: -10) {
