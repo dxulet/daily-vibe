@@ -9,8 +9,21 @@ struct VibeSnapshot: Sendable {
 @MainActor
 final class VibeViewModel {
     private(set) var state: LoadState<VibeSnapshot> = .idle
+    private var repo: (any PostRepository)?
+    private var toastCenter: ToastCenter?
 
     func load(repo: any PostRepository, toastCenter: ToastCenter) async {
+        self.repo = repo
+        self.toastCenter = toastCenter
+        await reload()
+    }
+
+    func retry() async {
+        await reload()
+    }
+
+    private func reload() async {
+        guard let repo, let toastCenter else { return }
         state = .loading
         state = await resolveLoadState(
             toastCenter: toastCenter,

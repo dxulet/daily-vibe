@@ -8,7 +8,7 @@ struct FeedScreen: View {
     @State private var vm = FeedViewModel()
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .bottom) {
             Color.vibeBackground.ignoresSafeArea()
 
             VStack(spacing: 0) {
@@ -19,7 +19,7 @@ struct FeedScreen: View {
                 tabToggleRow
                     .padding(.top, 12)
 
-                if let snapshot = vm.state.value {
+                LoadStateView(state: vm.state, onRetry: vm.retry) { snapshot in
                     VStack(spacing: 0) {
                         DailyVibeStrip(
                             prompt: snapshot.todayPrompt,
@@ -40,30 +40,26 @@ struct FeedScreen: View {
                             .padding(.bottom, 100)
                         }
                     }
-                } else {
-                    Spacer()
                 }
             }
-        }
-        .overlay(alignment: .bottom) {
+
             VStack(spacing: 0) {
                 Spacer(minLength: 0)
                 LinearGradient(
                     stops: [
                         .init(color: .clear, location: 0.0),
-                        .init(color: Color.vibeBackground.opacity(0.4), location: 0.4),
-                        .init(color: Color.vibeBackground.opacity(0.85), location: 0.75),
-                        .init(color: Color.vibeBackground.opacity(0.95), location: 1.0),
+                        .init(color: Color.vibeBackground.opacity(0.4), location: 0.3),
+                        .init(color: Color.vibeBackground.opacity(0.95), location: 0.65),
+                        .init(color: Color.vibeBackground, location: 0.85),
+                        .init(color: Color.vibeBackground, location: 1.0),
                     ],
                     startPoint: .top,
                     endPoint: .bottom
                 )
-                .frame(height: 240)
+                .frame(height: 280)
             }
-            .allowsHitTesting(false)
             .ignoresSafeArea(edges: .bottom)
-        }
-        .overlay(alignment: .bottom) {
+
             shutterButton
                 .padding(.bottom, 24)
         }

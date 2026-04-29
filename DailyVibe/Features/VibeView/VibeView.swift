@@ -15,7 +15,7 @@ struct VibeView: View {
         ZStack {
             Color.vibeBackground.ignoresSafeArea()
 
-            if let snapshot = vm.state.value {
+            LoadStateView(state: vm.state, onRetry: vm.retry) { snapshot in
                 ScrollView {
                     VStack(spacing: 16) {
                         promptCard(snapshot.prompt)
