@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct FeedScreen: View {
-    @Binding var path: NavigationPath
-    let onProfileTap: () -> Void
-
-    @StateObject private var vm = FeedViewModel()
+    @Environment(\.router) private var router
+    @Environment(\.postRepository) private var repo
+    @Environment(\.currentUserProvider) private var currentUserProvider
+    @State private var vm = FeedViewModel()
 
     var body: some View {
         ZStack {
@@ -18,12 +18,11 @@ struct FeedScreen: View {
                 tabToggleRow
                     .padding(.top, 12)
 
-                // Opacity-keyed (not branched) so view identity survives the 200ms loading flash.
                 VStack(spacing: 0) {
                     DailyVibeStrip(
                         prompt: vm.todayPrompt,
                         matchedFriends: vm.matchedFriends,
-                        onTap: { path.append(Route.vibeView) }
+                        onTap: { router.push(.vibeView) }
                     )
                     .padding(.horizontal, 16)
                     .padding(.top, 12)
@@ -43,16 +42,14 @@ struct FeedScreen: View {
             }
         }
         .overlay(alignment: .bottom) {
-            // Spacer-above-gradient pins the 240pt scrim to the literal screen bottom,
-            // past the safe-area inset, so the darkest stop lands at the home indicator.
             VStack(spacing: 0) {
                 Spacer(minLength: 0)
                 LinearGradient(
                     stops: [
-                        .init(color: .clear,                              location: 0.0),
-                        .init(color: Color.vibeBackground.opacity(0.4),   location: 0.4),
-                        .init(color: Color.vibeBackground.opacity(0.85),  location: 0.75),
-                        .init(color: Color.vibeBackground.opacity(0.95),  location: 1.0),
+                        .init(color: .clear, location: 0.0),
+                        .init(color: Color.vibeBackground.opacity(0.4), location: 0.4),
+                        .init(color: Color.vibeBackground.opacity(0.85), location: 0.75),
+                        .init(color: Color.vibeBackground.opacity(0.95), location: 1.0),
                     ],
                     startPoint: .top,
                     endPoint: .bottom
@@ -67,7 +64,7 @@ struct FeedScreen: View {
                 .padding(.bottom, 24)
         }
         .navigationBarBackButtonHidden(true)
-        .task { await vm.load() }
+        .task { await vm.load(repo: repo) }
     }
 
     // MARK: - Top bar
@@ -88,9 +85,9 @@ struct FeedScreen: View {
                     .accessibilityLabel("Today")
 
                 Button {
-                    onProfileTap()
+                    router.openSettings()
                 } label: {
-                    Avatar(friend: MockDataProvider.currentUser, size: 32)
+                    Avatar(friend: currentUserProvider.currentUser, size: 32)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel("Profile")
@@ -107,10 +104,10 @@ struct FeedScreen: View {
     private var tabToggleRow: some View {
         HStack(spacing: 24) {
             Text("My Friends")
-                .font(.system(size: 15, weight: .semibold))
+                .font(.vibeUsername)
                 .foregroundStyle(.white)
             Text("Friends of Friends")
-                .font(.system(size: 15, weight: .regular))
+                .font(.vibeBody)
                 .foregroundStyle(Color.vibeSecondaryText)
         }
         .frame(maxWidth: .infinity)
@@ -120,7 +117,7 @@ struct FeedScreen: View {
 
     private var shutterButton: some View {
         Button {
-            path.append(Route.postConfirm)
+            router.push(.postConfirm)
         } label: {
             ZStack {
                 Circle()
@@ -131,7 +128,6 @@ struct FeedScreen: View {
                     .frame(width: 60, height: 60)
             }
             .shadow(color: .black.opacity(0.5), radius: 8, y: 2)
-            // 88pt hit frame > 72pt visual = 8pt thumb-forgiveness past the ring.
             .frame(width: 88, height: 88)
             .contentShape(Circle())
         }
