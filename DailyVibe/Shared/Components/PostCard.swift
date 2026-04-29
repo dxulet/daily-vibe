@@ -15,8 +15,6 @@ struct PostCard: View {
     }
 }
 
-// Private helper — internal to PostCard.swift. The two callers (Feed, PostDetail in Phase 3)
-// don't compose this independently, so it stays out of the public Shared/Components/ surface.
 private struct UsernameRow: View {
     let author: Friend
     let timestampText: String

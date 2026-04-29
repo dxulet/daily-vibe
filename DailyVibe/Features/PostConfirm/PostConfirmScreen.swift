@@ -9,25 +9,18 @@ struct PostConfirmScreen: View {
             Color.vibeBackground.ignoresSafeArea()
 
             VStack(spacing: 16) {
-                // POST-02 + POST-05: dual-camera photo with always-rendered marker overlay.
-                // showMarker: vm.isMatched is the marker beat — flipping the toggle drives the
-                // spring reveal via DualCameraPhoto's internal .animation(.spring(...), value:).
-                // Photo is full-width edge-to-edge horizontally per CONTEXT.md.
                 DualCameraPhoto(
                     rearAsset: "photo_capture",
                     selfieAsset: "selfie_capture",
                     showMarker: vm.isMatched
                 )
 
-                // POST-03: caption row, display only — no TextField, no editing surface.
                 Text("Add a caption...")
                     .font(.vibeBody)
                     .foregroundStyle(.white.opacity(0.5))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
 
-                // POST-04: match toggle. Default OFF (VM-06). Direct $vm.isMatched binding
-                // — works because PostConfirmViewModel.isMatched is @Published var (no private(set)).
                 MatchToggleRow(prompt: vm.prompt, isMatched: $vm.isMatched)
                     .padding(.horizontal, 16)
                     .padding(.top, 16)
@@ -47,7 +40,6 @@ struct PostConfirmScreen: View {
         .vibeToolbarStyling()
     }
 
-    // POST-06: "My Friends ↓" centered, display only — no menu, no tap action.
     private var audienceSelector: some View {
         HStack(spacing: 4) {
             Text("My Friends")
@@ -57,9 +49,6 @@ struct PostConfirmScreen: View {
         .foregroundStyle(Color.vibeSecondaryText)
     }
 
-    // POST-06 + POST-07: bottom row — Retake (left, text, no PressableButtonStyle) +
-    // Send (76pt white circle hero button, PressableButtonStyle) + invisible balance.
-    // All actions use path.removeLast() (NAV-06).
     private var bottomActionRow: some View {
         HStack {
             Button("Retake") {
@@ -74,8 +63,8 @@ struct PostConfirmScreen: View {
 
             Spacer()
 
-            // Invisible duplicate of Retake — width tracks the visible button automatically,
-            // so the balance survives localization and Dynamic Type without a magic constant.
+            // Invisible Retake duplicate balances the row; width auto-tracks under
+            // localization and Dynamic Type without a magic constant.
             Button("Retake") { }
                 .font(.system(size: 14))
                 .hidden()
@@ -84,9 +73,6 @@ struct PostConfirmScreen: View {
         .padding(.bottom, 24)
     }
 
-    // POST-07: hero Send button — filled white 76pt circle with arrow.up SF Symbol.
-    // PressableButtonStyle is the second of two hero buttons (Feed shutter is the first).
-    // Send action: path.removeLast() returns to Feed (NAV-06).
     private var sendButton: some View {
         Button {
             path.removeLast()
@@ -104,8 +90,6 @@ struct PostConfirmScreen: View {
         .accessibilityLabel("Send")
     }
 
-    // POST-01: chevron-down close on topBarLeading. NO PressableButtonStyle (text/icon
-    // button, hero scoping rule). path.removeLast() per NAV-06.
     private var closeButton: some View {
         Button {
             path.removeLast()

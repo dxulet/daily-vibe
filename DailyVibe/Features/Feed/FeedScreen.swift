@@ -18,9 +18,7 @@ struct FeedScreen: View {
                 tabToggleRow
                     .padding(.top, 12)
 
-                // Always-rendered subtree — opacity-keyed on isLoading preserves view
-                // identity through the 200ms recording flash (matches the marker-overlay
-                // and MatchToggleRow patterns: "modifiers over conditional views").
+                // Opacity-keyed (not branched) so view identity survives the 200ms loading flash.
                 VStack(spacing: 0) {
                     DailyVibeStrip(
                         prompt: vm.todayPrompt,
@@ -45,11 +43,8 @@ struct FeedScreen: View {
             }
         }
         .overlay(alignment: .bottom) {
-            // Scrim anchored to the literal SCREEN bottom (past the home indicator).
-            // VStack with a Spacer above the gradient lets the gradient size itself to
-            // its natural 240pt and stick to the bottom of a full-screen frame that
-            // ignores the safe area — so the darkest stop lands at the screen edge,
-            // not at the safe-area inset.
+            // Spacer-above-gradient pins the 240pt scrim to the literal screen bottom,
+            // past the safe-area inset, so the darkest stop lands at the home indicator.
             VStack(spacing: 0) {
                 Spacer(minLength: 0)
                 LinearGradient(
@@ -75,9 +70,6 @@ struct FeedScreen: View {
         .task { await vm.load() }
     }
 
-    // FEED-01: top bar — friends icon (left) + WordmarkHeader (center) + calendar + profile (right).
-    // Use overlay-centered WordmarkHeader so the side clusters can size naturally without
-    // unbounded Spacers fighting the centered title for width.
     private var topBar: some View {
         HStack(spacing: 0) {
             Image(systemName: "person.2")
@@ -108,7 +100,6 @@ struct FeedScreen: View {
         }
     }
 
-    // FEED-02: tab toggle row — purely visual, no tap behavior, no separator.
     private var tabToggleRow: some View {
         HStack(spacing: 24) {
             Text("My Friends")
@@ -121,9 +112,6 @@ struct FeedScreen: View {
         .frame(maxWidth: .infinity)
     }
 
-    // FEED-07: hero shutter floats on the gradient scrim — white ring + filled disc.
-    // Tight shadow earns elevation without bleeding into a hard opacity wall (the scrim
-    // never reaches 1.0 at bottom, so the shadow has room to dissipate).
     private var shutterButton: some View {
         Button {
             path.append(Route.postConfirm)
@@ -137,9 +125,7 @@ struct FeedScreen: View {
                     .frame(width: 60, height: 60)
             }
             .shadow(color: .black.opacity(0.5), radius: 8, y: 2)
-            // 88pt hit frame > 72pt visual gives ~8pt thumb-forgiveness past
-            // the visible ring. Visual stays centered (the ZStack content hugs
-            // its 72pt size; the larger frame just expands the hit region).
+            // 88pt hit frame > 72pt visual = 8pt thumb-forgiveness past the ring.
             .frame(width: 88, height: 88)
             .contentShape(Circle())
         }

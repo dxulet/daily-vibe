@@ -4,13 +4,10 @@ struct DualCameraPhoto: View {
     let rearAsset: String
     let selfieAsset: String
     let showMarker: Bool
-    var aspect: CGFloat = 3/4  // 3:4 for feed/detail, 1:1 for VibeView grid
+    var aspect: CGFloat = 3/4
 
     var body: some View {
-        // Aspect ratio is caller-driven via the `aspect:` parameter to support both
-        // 3:4 (PostCard, PostConfirm, PostDetail) and 1:1 (VibeView grid) contexts.
-        // Setting .aspectRatio inside the component owns the contract end-to-end so
-        // callers don't double-apply at the call site.
+        // Caller-driven aspect (3:4 for feed/detail, 1:1 for grid).
         Color.clear
             .aspectRatio(aspect, contentMode: .fit)
             .overlay {
@@ -39,10 +36,7 @@ struct DualCameraPhoto: View {
             }
             .clipShape(.rect(cornerRadius: 12))
             .overlay(alignment: .bottomTrailing) {
-                // Marker overlay — ALWAYS rendered. Visibility controlled by scaleEffect + opacity.
-                // Single .animation(_:value:) modifier applied LAST in the chain (POLI-01).
-                // NEVER wrap this in a conditional branch on the flag — that destroys view identity and breaks the spring.
-                // Decorative — surrounding context (MatchToggleRow / vibe-matched grid) carries the semantic meaning.
+                // POLI-07: always-rendered, controlled via scaleEffect/opacity. Never branch this on the flag.
                 VibeMarker()
                     .font(.system(size: 28, weight: .bold))
                     .scaleEffect(showMarker ? 1 : 0)

@@ -14,7 +14,6 @@ struct VibeView: View {
             Color.vibeBackground.ignoresSafeArea()
 
             if vm.isLoading {
-                // 200ms loading flash (VIBE-07) — chrome (toolbar) renders above; body is empty.
                 EmptyView()
             } else {
                 ScrollView {
@@ -22,9 +21,6 @@ struct VibeView: View {
                         promptCard(vm.prompt)
 
                         if vm.matchedPosts.isEmpty {
-                            // Inline empty-state replacement (VIBE-06): prompt card stays visible above.
-                            // Mock data always returns 6 so this never fires in the recording, but the
-                            // code path exists for craft signal when grepped.
                             EmptyVibeState()
                         } else {
                             grid
@@ -50,11 +46,10 @@ struct VibeView: View {
         .task { await vm.load() }
     }
 
-    // MARK: - Prompt card (VIBE-02)
+    // MARK: - Prompt card
 
     private func promptCard(_ prompt: DailyPrompt) -> some View {
-        // The prompt itself lives on the toolbar principal item — rendering it here too
-        // produced two copies of the same string ~80pt apart on screen.
+        // Prompt text lives on the toolbar principal item; this card carries metadata only.
         VStack(alignment: .leading, spacing: 8) {
             Text("Vibe #\(prompt.editionNumber)")
                 .font(.system(size: 12))
@@ -69,7 +64,7 @@ struct VibeView: View {
         .clipShape(.rect(cornerRadius: 16))
     }
 
-    // MARK: - Grid (VIBE-03..VIBE-05)
+    // MARK: - Grid
 
     private var grid: some View {
         LazyVGrid(columns: columns, spacing: 12) {
@@ -79,16 +74,14 @@ struct VibeView: View {
                 } label: {
                     cell(for: post)
                 }
-                .buttonStyle(.plain)  // hero-only press feedback (CONTEXT.md) — NO PressableButtonStyle
+                .buttonStyle(.plain)
             }
         }
     }
 
     private func cell(for post: Post) -> some View {
-        // showMarker: false — the grid IS the vibe-matched surface; per-cell
-        // ✦ markers are redundant noise and previously collided with the
-        // bottom-leading username scrim on the same 16pt edge strip,
-        // muddying the precious yellow accent.
+        // showMarker: false — the grid itself is the vibe-matched surface; per-cell
+        // markers would collide with the bottom-leading username scrim.
         DualCameraPhoto(
             rearAsset: post.rearPhotoAsset,
             selfieAsset: post.selfiePhotoAsset,
@@ -96,10 +89,8 @@ struct VibeView: View {
             aspect: 1
         )
         .overlay(alignment: .bottom) {
-            // Scrim is the only surface that needs the rounded clip — DualCameraPhoto
-            // already clips its body internally; re-imposing an outer clip on the cell
-            // would re-clip the marker overlay sibling and break POLI-07's spring-overshoot
-            // bleed contract.
+            // Clip lives on the scrim only — re-clipping the cell would re-clip the
+            // marker sibling and break POLI-07's spring-overshoot bleed.
             LinearGradient(
                 colors: [.black.opacity(0.0), .black.opacity(0.6)],
                 startPoint: .center,

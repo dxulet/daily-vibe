@@ -47,7 +47,7 @@ extension Avatar {
             }
             HStack(spacing: 16) {
                 Avatar(friend: MockDataProvider.friends[0], size: 20)
-                Avatar(friend: MockDataProvider.friends[0])           // 28pt default
+                Avatar(friend: MockDataProvider.friends[0])
                 Avatar(friend: MockDataProvider.friends[0], size: 32)
                 Avatar(friend: MockDataProvider.friends[0], size: 60)
             }
