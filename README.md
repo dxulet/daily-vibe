@@ -5,8 +5,9 @@ A feature concept for BeReal: a globally-shared daily prompt added to the existi
 
 Built as a 4-day take-home for the Founding/Product Engineer role at BeReal.
 
-![Daily Vibe demo](https://github.com/user-attachments/assets/00b409e0-bf19-4861-a25e-52cc904cb0c0)
-
+<div align="center">
+  <video src="https://github.com/user-attachments/assets/00b409e0-bf19-4861-a25e-52cc904cb0c0" controls></video>
+</div>
 
 
 ## Submission contents
