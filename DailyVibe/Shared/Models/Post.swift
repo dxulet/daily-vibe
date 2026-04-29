@@ -9,7 +9,6 @@ struct Post: Identifiable, Hashable {
     let timestampText: String
     let isVibeMatched: Bool
 
-    // id-only Hashable: keeps NavigationPath.append(.postDetail(post)) idempotent.
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }

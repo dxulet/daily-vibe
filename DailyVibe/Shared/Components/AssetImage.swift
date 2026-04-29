@@ -1,9 +1,6 @@
 import SwiftUI
 import UIKit
 
-/// Renders a named asset-catalog image at fill aspect, with a caller-provided
-/// placeholder shown when the asset isn't present in the bundle. The encapsulated
-/// `UIImage(named:)` lookup keeps callers free of UIKit imports.
 struct AssetImage<Placeholder: View>: View {
     let assetName: String
     let backgroundColor: Color

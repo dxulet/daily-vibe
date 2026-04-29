@@ -7,7 +7,6 @@ struct DualCameraPhoto: View {
     var aspect: CGFloat = 3/4
 
     var body: some View {
-        // Caller-driven aspect (3:4 for feed/detail, 1:1 for grid).
         Color.clear
             .aspectRatio(aspect, contentMode: .fit)
             .overlay {

@@ -23,8 +23,6 @@ struct Avatar: View {
 }
 
 extension Avatar {
-    /// Pure-math sizing derived from `size` and an optional override `borderWidth`.
-    /// Auto-sized border = `size / 20` rounded to nearest 0.5pt.
     fileprivate struct Metrics {
         let borderWidth: CGFloat
         let initialsFontSize: CGFloat
