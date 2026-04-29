@@ -1,10 +1,10 @@
-import SwiftUI
+import Foundation
 
 struct Friend: Identifiable, Hashable {
     let id: UUID
     let username: String
     let initials: String
-    let avatarColor: Color
+    let avatarPaletteIndex: Int
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)

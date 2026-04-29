@@ -1,19 +1,19 @@
-import SwiftUI
+import Foundation
 
 enum MockDataProvider {
     static let friends: [Friend] = [
-        Friend(id: UUID(), username: "marco", initials: "M", avatarColor: .red),
-        Friend(id: UUID(), username: "ayagul", initials: "A", avatarColor: .teal),
-        Friend(id: UUID(), username: "daulet", initials: "D", avatarColor: .yellow),
-        Friend(id: UUID(), username: "sarah", initials: "S", avatarColor: .mint),
-        Friend(id: UUID(), username: "jen", initials: "J", avatarColor: .orange),
+        Friend(id: UUID(), username: "marco", initials: "M", avatarPaletteIndex: 1),
+        Friend(id: UUID(), username: "ayagul", initials: "A", avatarPaletteIndex: 2),
+        Friend(id: UUID(), username: "daulet", initials: "D", avatarPaletteIndex: 3),
+        Friend(id: UUID(), username: "sarah", initials: "S", avatarPaletteIndex: 4),
+        Friend(id: UUID(), username: "jen", initials: "J", avatarPaletteIndex: 5),
     ]
 
     static let currentUser = Friend(
         id: UUID(),
         username: "you",
         initials: "Y",
-        avatarColor: .vibeAvatarMuted
+        avatarPaletteIndex: 0
     )
 
     static let todayPrompt = DailyPrompt(

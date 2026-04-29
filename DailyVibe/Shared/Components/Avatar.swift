@@ -3,12 +3,12 @@ import SwiftUI
 struct Avatar: View {
     let friend: Friend
     var size: CGFloat = 28
-    var borderWidth: CGFloat? = nil
+    var borderWidth: CGFloat?
 
     var body: some View {
         let metrics = Metrics(size: size, borderWidth: borderWidth)
         Circle()
-            .fill(friend.avatarColor)
+            .fill(AvatarPalette.color(for: friend))
             .frame(width: size, height: size)
             .overlay(
                 Text(friend.initials)
@@ -19,6 +19,7 @@ struct Avatar: View {
                 Circle()
                     .stroke(.white.opacity(0.92), lineWidth: metrics.borderWidth)
             )
+            .accessibilityLabel(friend.username)
     }
 }
 
