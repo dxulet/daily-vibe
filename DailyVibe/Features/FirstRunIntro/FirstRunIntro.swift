@@ -9,7 +9,7 @@ struct FirstRunIntro: View {
             VibeMarker()
                 .font(.system(size: 60, weight: .bold))
 
-            Text("Today, BeReal has a vibe.")
+            Text("Today has a vibe.")
                 .font(.vibeIntroHeadline)
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)

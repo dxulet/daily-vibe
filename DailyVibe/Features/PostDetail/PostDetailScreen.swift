@@ -49,7 +49,7 @@ struct PostDetailScreen: View {
                 .accessibilityLabel("Back")
             }
             ToolbarItem(placement: .principal) {
-                Text("\(post.author.username)'s BeReal.")
+                Text("\(post.author.username)'s post.")
                     .font(.vibeToolbarTitle)
                     .foregroundStyle(.white)
             }

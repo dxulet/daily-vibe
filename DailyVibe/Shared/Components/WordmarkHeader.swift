@@ -2,7 +2,7 @@ import SwiftUI
 
 struct WordmarkHeader: View {
     var body: some View {
-        Text("BeReal.")
+        Text("Daily Vibe.")
             .font(.vibeWordmark)
             .foregroundStyle(.white)
     }

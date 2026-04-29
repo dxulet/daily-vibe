@@ -1,22 +1,14 @@
 
 # Daily Vibe
 
-A feature concept for BeReal: a globally-shared daily prompt added to the existing daily notification, with an in-app surface to compare how friends interpreted it.
+A feature concept for a daily-photo social app: a globally-shared daily prompt added to the existing daily notification, with an in-app surface to compare how friends interpreted it.
 
-Built as a 4-day take-home for the Founding/Product Engineer role at BeReal.
+Built as a 4-day take-home for a Founding/Product Engineer role.
 
 <div align="center">
   <video src="https://github.com/user-attachments/assets/00b409e0-bf19-4861-a25e-52cc904cb0c0" controls></video>
 </div>
 
-
-## Submission contents
-
-- **[Product thinking](docs/product-thinking.md)** — the case for Daily Vibe: positioning, alternatives considered, A/B test design, kill criteria
-- **[Spec](docs/SPEC.md)** — implementation contract: surfaces, states, data model, API shape, edge cases
-- **[Figma prototype](FIGMA_LINK_HERE)** — clickable click-flow (anyone with link, view only)
-- **[Loom walkthrough](LOOM_LINK_HERE)** — 5-min talk-through
-- **iOS app** — this repo
 
 ## Feature in one screen
 
@@ -33,8 +25,6 @@ The notification adds a single line: *"Today's vibe: your hands."* On post-confi
 ## What's deliberately out of scope
 
 No real camera (`AVFoundation`), no real notifications (`UNUserNotificationCenter`), no backend, no third-party libraries, no friend graph, no feed pagination. The repository protocol and `LoadState` plumbing are wired so production cuts are localized.
-
-Full prototype/production divide in [SPEC.md §4](docs/SPEC.md#4-edge-cases--error-handling).
 
 ## Run
 
