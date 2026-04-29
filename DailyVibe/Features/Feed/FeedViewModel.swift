@@ -10,23 +10,28 @@ struct FeedSnapshot: Sendable {
 @MainActor
 final class FeedViewModel {
     private(set) var state: LoadState<FeedSnapshot> = .idle
-    private var repo: (any PostRepository)?
-    private var toastCenter: ToastCenter?
 
-    func load(repo: any PostRepository, toastCenter: ToastCenter) async {
+    private let repo: any PostRepository
+    private let toastCenter: ToastCenter
+
+    init(repo: any PostRepository, toastCenter: ToastCenter) {
         self.repo = repo
         self.toastCenter = toastCenter
-        await reload()
     }
 
-    func retry() async {
-        await reload()
+    func loadIfNeeded() async {
+        if case .idle = state {
+            await fetch()
+        }
     }
 
-    private func reload() async {
-        guard let repo, let toastCenter else { return }
+    func refresh() async {
+        await fetch()
+    }
+
+    private func fetch() async {
         state = .loading
-        state = await resolveLoadState(
+        let resolved = await resolveLoadState(
             toastCenter: toastCenter,
             errorMessage: "Couldn't load your feed. Pull to refresh."
         ) {
@@ -39,5 +44,6 @@ final class FeedViewModel {
                 matchedFriends: matched
             )
         }
+        if let resolved { state = resolved }
     }
 }

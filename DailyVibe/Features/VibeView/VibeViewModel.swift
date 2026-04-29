@@ -9,23 +9,30 @@ struct VibeSnapshot: Sendable {
 @MainActor
 final class VibeViewModel {
     private(set) var state: LoadState<VibeSnapshot> = .idle
-    private var repo: (any PostRepository)?
-    private var toastCenter: ToastCenter?
 
-    func load(repo: any PostRepository, toastCenter: ToastCenter) async {
+    var prompt: DailyPrompt? { state.value?.prompt }
+
+    private let repo: any PostRepository
+    private let toastCenter: ToastCenter
+
+    init(repo: any PostRepository, toastCenter: ToastCenter) {
         self.repo = repo
         self.toastCenter = toastCenter
-        await reload()
     }
 
-    func retry() async {
-        await reload()
+    func loadIfNeeded() async {
+        if case .idle = state {
+            await fetch()
+        }
     }
 
-    private func reload() async {
-        guard let repo, let toastCenter else { return }
+    func refresh() async {
+        await fetch()
+    }
+
+    private func fetch() async {
         state = .loading
-        state = await resolveLoadState(
+        let resolved = await resolveLoadState(
             toastCenter: toastCenter,
             errorMessage: "Couldn't load today's vibe."
         ) {
@@ -33,5 +40,6 @@ final class VibeViewModel {
             async let matched = repo.matchedPosts()
             return try await VibeSnapshot(prompt: prompt, matchedPosts: matched)
         }
+        if let resolved { state = resolved }
     }
 }

@@ -5,27 +5,46 @@ import Foundation
 final class PostConfirmViewModel {
     var isMatched: Bool = false
     private(set) var promptState: LoadState<DailyPrompt> = .idle
-    private var repo: (any PostRepository)?
-    private var toastCenter: ToastCenter?
+    private(set) var isPublishing: Bool = false
 
-    func load(repo: any PostRepository, toastCenter: ToastCenter) async {
+    private let repo: any PostRepository
+    private let toastCenter: ToastCenter
+
+    init(repo: any PostRepository, toastCenter: ToastCenter) {
         self.repo = repo
         self.toastCenter = toastCenter
-        await reload()
     }
 
-    func retry() async {
-        await reload()
+    var canPublish: Bool {
+        if case .loaded = promptState, !isPublishing { return true }
+        return false
     }
 
-    private func reload() async {
-        guard let repo, let toastCenter else { return }
+    func loadIfNeeded() async {
+        if case .idle = promptState {
+            await fetchPrompt()
+        }
+    }
+
+    func refresh() async {
+        await fetchPrompt()
+    }
+
+    func publish() async -> DailyPrompt? {
+        guard case .loaded(let prompt) = promptState, !isPublishing else { return nil }
+        isPublishing = true
+        defer { isPublishing = false }
+        return prompt
+    }
+
+    private func fetchPrompt() async {
         promptState = .loading
-        promptState = await resolveLoadState(
+        let resolved = await resolveLoadState(
             toastCenter: toastCenter,
             errorMessage: "Couldn't load today's prompt."
         ) {
             try await repo.todayPrompt()
         }
+        if let resolved { promptState = resolved }
     }
 }

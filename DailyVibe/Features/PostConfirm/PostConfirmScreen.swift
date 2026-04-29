@@ -4,44 +4,45 @@ struct PostConfirmScreen: View {
     @Environment(\.router) private var router
     @Environment(\.postRepository) private var repo
     @Environment(\.toastCenter) private var toastCenter
-    @State private var vm = PostConfirmViewModel()
+    @Environment(\.analytics) private var analytics
+    @State private var vm: PostConfirmViewModel?
 
     var body: some View {
-        @Bindable var vm = vm
-
-        return ZStack {
+        ZStack {
             Color.vibeBackground.ignoresSafeArea()
 
-            VStack(spacing: 16) {
-                DualCameraPhoto(
-                    rearAsset: "photo_capture",
-                    selfieAsset: "selfie_capture",
-                    showMarker: vm.isMatched
-                )
+            if let vm {
+                @Bindable var vm = vm
 
-                Text("Add a caption...")
-                    .font(.vibeBody)
-                    .foregroundStyle(.white.opacity(0.5))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 16)
+                VStack(spacing: 16) {
+                    DualCameraPhoto(
+                        rearAsset: "photo_capture",
+                        selfieAsset: "selfie_capture",
+                        showMarker: vm.isMatched
+                    )
 
-                Group {
-                    if let prompt = vm.promptState.value {
+                    Text("Add a caption...")
+                        .font(.vibeBody)
+                        .foregroundStyle(.white.opacity(0.5))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 16)
+
+                    LoadStateView(
+                        state: vm.promptState,
+                        onRetry: { await vm.refresh() }
+                    ) { prompt in
                         MatchToggleRow(prompt: prompt, isMatched: $vm.isMatched)
-                    } else {
-                        // Reserves the row's visual height so MatchToggleRow doesn't pop in
-                        // when the prompt resolves on a real backend.
-                        Color.clear.frame(height: 62)
                     }
+                    .frame(minHeight: 62)
+                    .padding(.horizontal, 16)
+                    .padding(.top, 16)
+
+                    Spacer()
+
+                    audienceSelector
+
+                    bottomActionRow
                 }
-                .padding(.horizontal, 16)
-                .padding(.top, 16)
-
-                Spacer()
-
-                audienceSelector
-
-                bottomActionRow
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -50,7 +51,12 @@ struct PostConfirmScreen: View {
             ToolbarItem(placement: .principal) { WordmarkHeader() }
         }
         .vibeToolbarStyling()
-        .task { await vm.load(repo: repo, toastCenter: toastCenter) }
+        .task {
+            if vm == nil {
+                vm = PostConfirmViewModel(repo: repo, toastCenter: toastCenter)
+            }
+            await vm?.loadIfNeeded()
+        }
     }
 
     // MARK: - Audience selector
@@ -85,7 +91,11 @@ struct PostConfirmScreen: View {
 
     private var sendButton: some View {
         Button {
-            router.pop()
+            Task {
+                guard let vm, let prompt = await vm.publish() else { return }
+                analytics.log(.dailyVibePostPublished(promptId: prompt.promptId, isVibeMatch: vm.isMatched))
+                router.pop()
+            }
         } label: {
             ZStack {
                 Circle()
@@ -95,8 +105,10 @@ struct PostConfirmScreen: View {
                     .font(.system(size: 28, weight: .bold))
                     .foregroundStyle(.black)
             }
+            .opacity((vm?.canPublish ?? false) ? 1 : 0.4)
         }
         .buttonStyle(PressableButtonStyle())
+        .disabled(!(vm?.canPublish ?? false))
         .accessibilityLabel("Send")
     }
 

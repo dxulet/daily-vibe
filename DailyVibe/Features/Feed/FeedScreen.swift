@@ -5,7 +5,7 @@ struct FeedScreen: View {
     @Environment(\.postRepository) private var repo
     @Environment(\.currentUserProvider) private var currentUserProvider
     @Environment(\.toastCenter) private var toastCenter
-    @State private var vm = FeedViewModel()
+    @State private var vm: FeedViewModel?
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -19,7 +19,8 @@ struct FeedScreen: View {
                 tabToggleRow
                     .padding(.top, 12)
 
-                LoadStateView(state: vm.state, onRetry: vm.retry) { snapshot in
+                if let vm {
+                    LoadStateView(state: vm.state, onRetry: { await vm.refresh() }) { snapshot in
                     VStack(spacing: 0) {
                         DailyVibeStrip(
                             prompt: snapshot.todayPrompt,
@@ -40,6 +41,7 @@ struct FeedScreen: View {
                             .padding(.bottom, 100)
                         }
                     }
+                }
                 }
             }
 
@@ -64,7 +66,12 @@ struct FeedScreen: View {
                 .padding(.bottom, 24)
         }
         .navigationBarBackButtonHidden(true)
-        .task { await vm.load(repo: repo, toastCenter: toastCenter) }
+        .task {
+            if vm == nil {
+                vm = FeedViewModel(repo: repo, toastCenter: toastCenter)
+            }
+            await vm?.loadIfNeeded()
+        }
     }
 
     // MARK: - Top bar
@@ -85,7 +92,7 @@ struct FeedScreen: View {
                     .accessibilityLabel("Today")
 
                 Button {
-                    router.openSettings()
+                    router.sheet = .settings
                 } label: {
                     Avatar(friend: currentUserProvider.currentUser, size: 32)
                 }
@@ -111,6 +118,7 @@ struct FeedScreen: View {
                 .foregroundStyle(Color.vibeSecondaryText)
         }
         .frame(maxWidth: .infinity)
+        .accessibilityHidden(true)
     }
 
     // MARK: - Shutter button

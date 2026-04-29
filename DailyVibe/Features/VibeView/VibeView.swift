@@ -4,7 +4,7 @@ struct VibeView: View {
     @Environment(\.router) private var router
     @Environment(\.postRepository) private var repo
     @Environment(\.toastCenter) private var toastCenter
-    @State private var vm = VibeViewModel()
+    @State private var vm: VibeViewModel?
 
     private let columns = [
         GridItem(.flexible(), spacing: 12),
@@ -15,18 +15,20 @@ struct VibeView: View {
         ZStack {
             Color.vibeBackground.ignoresSafeArea()
 
-            LoadStateView(state: vm.state, onRetry: vm.retry) { snapshot in
-                ScrollView {
-                    VStack(spacing: 16) {
-                        promptCard(snapshot.prompt)
+            if let vm {
+                LoadStateView(state: vm.state, onRetry: { await vm.refresh() }) { snapshot in
+                    ScrollView {
+                        VStack(spacing: 16) {
+                            promptCard(snapshot.prompt)
 
-                        if snapshot.matchedPosts.isEmpty {
-                            EmptyVibeState()
-                        } else {
-                            grid(posts: snapshot.matchedPosts)
+                            if snapshot.matchedPosts.isEmpty {
+                                EmptyVibeState()
+                            } else {
+                                grid(posts: snapshot.matchedPosts)
+                            }
                         }
+                        .padding(.horizontal, 16)
                     }
-                    .padding(.horizontal, 16)
                 }
             }
         }
@@ -36,7 +38,7 @@ struct VibeView: View {
                     Text("today's vibe")
                         .font(.vibeLowercaseLabel)
                         .foregroundStyle(Color.vibeSecondaryText)
-                    if let prompt = vm.state.value?.prompt {
+                    if let prompt = vm?.prompt {
                         Text(prompt.promptText)
                             .font(.vibeUsername)
                             .foregroundStyle(.white)
@@ -45,7 +47,12 @@ struct VibeView: View {
             }
         }
         .vibeToolbarStyling()
-        .task { await vm.load(repo: repo, toastCenter: toastCenter) }
+        .task {
+            if vm == nil {
+                vm = VibeViewModel(repo: repo, toastCenter: toastCenter)
+            }
+            await vm?.loadIfNeeded()
+        }
     }
 
     // MARK: - Prompt card
