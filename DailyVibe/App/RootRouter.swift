@@ -24,14 +24,13 @@ struct RootRouter: View {
             switch sheet {
             case .firstRun:
                 FirstRunIntro()
-                    .onDisappear { hasSeenIntro = true }
             case .settings:
                 SettingsScreen()
             }
         }
         .toastHost()
         .task {
-            if !hasSeenIntro { router.openFirstRun() }
+            if !hasSeenIntro { router.sheet = .firstRun }
         }
     }
 }

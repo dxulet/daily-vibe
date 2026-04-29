@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SettingsScreen: View {
-    @State private var isVibeEnabled = true
+    @AppStorage("dailyVibeEnabled") private var isVibeEnabled = true
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {

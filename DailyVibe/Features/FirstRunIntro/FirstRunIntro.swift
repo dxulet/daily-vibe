@@ -2,6 +2,7 @@ import SwiftUI
 
 struct FirstRunIntro: View {
     @Environment(\.dismiss) private var dismiss
+    @AppStorage("hasSeenIntro") private var hasSeenIntro = false
 
     var body: some View {
         VStack(spacing: 24) {
@@ -18,7 +19,10 @@ struct FirstRunIntro: View {
                 .foregroundStyle(Color.vibeSecondaryText)
                 .multilineTextAlignment(.center)
 
-            Button { dismiss() } label: {
+            Button {
+                hasSeenIntro = true
+                dismiss()
+            } label: {
                 Text("Got it")
                     .font(.vibeUsername)
                     .foregroundStyle(.black)
