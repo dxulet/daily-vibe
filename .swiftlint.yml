@@ -1,0 +1,62 @@
+included:
+  - DailyVibe
+  - DailyVibeTests
+
+excluded:
+  - .build
+  - .planning
+  - DerivedData
+
+# Reasonable defaults: keep the obvious wins, skip the noise.
+disabled_rules:
+  - line_length                          # Often unhelpful in SwiftUI view code
+  - trailing_comma                       # Trailing commas in multiline literals are fine
+  - todo                                 # Not a code-quality issue
+  - multiple_closures_with_trailing_closure  # SwiftUI viewbuilders use this idiomatically
+
+opt_in_rules:
+  - empty_count            # Prefer .isEmpty over count == 0
+  - explicit_init
+  - first_where            # .first(where:) over .filter().first
+  - implicit_return
+  - last_where
+  - prefer_self_type_over_type_of_self
+  - redundant_nil_coalescing
+  - sorted_first_last
+  - toggle_bool
+  - unneeded_parentheses_in_closure_argument
+  - unused_import
+
+identifier_name:
+  min_length: 2            # Allow `vm`, `id`
+  excluded:
+    - id
+    - vm
+    - n
+    - v                    # Idiomatic in `if case .loaded(let v)` pattern binds
+    - e                    # Idiomatic in `if case .failed(let e)` pattern binds
+
+type_name:
+  min_length: 3
+  max_length:
+    warning: 60
+    error: 80
+
+function_body_length:
+  warning: 80
+  error: 120
+
+type_body_length:
+  warning: 300
+  error: 500
+
+file_length:
+  warning: 500
+  error: 800
+
+cyclomatic_complexity:
+  warning: 12
+  error: 20
+
+nesting:
+  type_level: 2
