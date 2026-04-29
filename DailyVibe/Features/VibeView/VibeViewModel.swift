@@ -12,16 +12,13 @@ final class VibeViewModel {
 
     func load(repo: any PostRepository, toastCenter: ToastCenter) async {
         state = .loading
-
-        async let prompt = repo.todayPrompt()
-        async let matched = repo.matchedPosts()
-
-        do {
-            let snapshot = try await VibeSnapshot(prompt: prompt, matchedPosts: matched)
-            state = .loaded(snapshot)
-        } catch {
-            state = .failed(error)
-            toastCenter.show("Couldn't load today's vibe.")
+        state = await resolveLoadState(
+            toastCenter: toastCenter,
+            errorMessage: "Couldn't load today's vibe."
+        ) {
+            async let prompt = repo.todayPrompt()
+            async let matched = repo.matchedPosts()
+            return try await VibeSnapshot(prompt: prompt, matchedPosts: matched)
         }
     }
 }

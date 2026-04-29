@@ -10,7 +10,19 @@ enum LoadState<Value: Sendable>: Sendable {
         if case .loaded(let v) = self { v } else { nil }
     }
 
-    var isLoading: Bool {
-        if case .loading = self { true } else { false }
+}
+
+/// Runs `work`, posting `.loaded` on success or `.failed` + a toast on failure.
+@MainActor
+func resolveLoadState<Value>(
+    toastCenter: ToastCenter,
+    errorMessage: String,
+    _ work: () async throws -> Value
+) async -> LoadState<Value> {
+    do {
+        return .loaded(try await work())
+    } catch {
+        toastCenter.show(errorMessage)
+        return .failed(error)
     }
 }

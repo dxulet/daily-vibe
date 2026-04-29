@@ -12,6 +12,8 @@ final class AppRouter {
     var path: [Route] = []
     var sheet: Sheet?
 
+    // nonisolated so the @Entry default in EnvironmentValues can build one
+    // synchronously off the main actor.
     nonisolated init() {}
 
     func push(_ route: Route) { path.append(route) }

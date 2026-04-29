@@ -25,11 +25,17 @@ struct PostConfirmScreen: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
 
-                if let prompt = vm.promptState.value {
-                    MatchToggleRow(prompt: prompt, isMatched: $vm.isMatched)
-                        .padding(.horizontal, 16)
-                        .padding(.top, 16)
+                Group {
+                    if let prompt = vm.promptState.value {
+                        MatchToggleRow(prompt: prompt, isMatched: $vm.isMatched)
+                    } else {
+                        // Reserves the row's visual height so MatchToggleRow doesn't pop in
+                        // when the prompt resolves on a real backend.
+                        Color.clear.frame(height: 62)
+                    }
                 }
+                .padding(.horizontal, 16)
+                .padding(.top, 16)
 
                 Spacer()
 

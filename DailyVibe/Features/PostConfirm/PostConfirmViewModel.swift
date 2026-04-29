@@ -8,12 +8,11 @@ final class PostConfirmViewModel {
 
     func load(repo: any PostRepository, toastCenter: ToastCenter) async {
         promptState = .loading
-        do {
-            let prompt = try await repo.todayPrompt()
-            promptState = .loaded(prompt)
-        } catch {
-            promptState = .failed(error)
-            toastCenter.show("Couldn't load today's prompt.")
+        promptState = await resolveLoadState(
+            toastCenter: toastCenter,
+            errorMessage: "Couldn't load today's prompt."
+        ) {
+            try await repo.todayPrompt()
         }
     }
 }

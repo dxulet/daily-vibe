@@ -35,8 +35,6 @@ extension EnvironmentValues {
     @Entry var toastCenter: ToastCenter = ToastCenter()
 }
 
-// MARK: - Banner view
-
 private struct ToastBanner: View {
     let toast: ToastCenter.Toast
 
@@ -61,10 +59,8 @@ private struct ToastBanner: View {
     }
 }
 
-// MARK: - View modifier
-
 private struct ToastHostModifier: ViewModifier {
-    let center: ToastCenter
+    @Environment(\.toastCenter) private var center
 
     func body(content: Content) -> some View {
         content
@@ -83,7 +79,7 @@ private struct ToastHostModifier: ViewModifier {
 }
 
 extension View {
-    func toastHost(_ center: ToastCenter) -> some View {
-        modifier(ToastHostModifier(center: center))
+    func toastHost() -> some View {
+        modifier(ToastHostModifier())
     }
 }

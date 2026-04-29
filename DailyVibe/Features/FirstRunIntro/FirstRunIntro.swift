@@ -22,7 +22,7 @@ struct FirstRunIntro: View {
 
             Button { dismiss() } label: {
                 Text("Got it")
-                    .font(.vibeButtonLabel)
+                    .font(.vibeUsername)
                     .foregroundStyle(.black)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 14)

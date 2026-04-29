@@ -13,21 +13,18 @@ final class FeedViewModel {
 
     func load(repo: any PostRepository, toastCenter: ToastCenter) async {
         state = .loading
-
-        async let posts = repo.feedPosts()
-        async let prompt = repo.todayPrompt()
-        async let matched = repo.matchedFriendsToday()
-
-        do {
-            let snapshot = try await FeedSnapshot(
+        state = await resolveLoadState(
+            toastCenter: toastCenter,
+            errorMessage: "Couldn't load your feed. Pull to refresh."
+        ) {
+            async let posts = repo.feedPosts()
+            async let prompt = repo.todayPrompt()
+            async let matched = repo.matchedFriendsToday()
+            return try await FeedSnapshot(
                 posts: posts,
                 todayPrompt: prompt,
                 matchedFriends: matched
             )
-            state = .loaded(snapshot)
-        } catch {
-            state = .failed(error)
-            toastCenter.show("Couldn't load your feed. Pull to refresh.")
         }
     }
 }
