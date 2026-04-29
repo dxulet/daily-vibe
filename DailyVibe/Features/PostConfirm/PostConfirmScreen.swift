@@ -94,7 +94,7 @@ struct PostConfirmScreen: View {
             Task {
                 guard let vm, let prompt = await vm.publish() else { return }
                 analytics.log(.dailyVibePostPublished(promptId: prompt.promptId, isVibeMatch: vm.isMatched))
-                router.pop()
+                router.push(.vibeView)
             }
         } label: {
             ZStack {

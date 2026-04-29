@@ -17,6 +17,9 @@ final class AppRouter {
 
     func push(_ route: Route) { path.append(route) }
     func pop() { _ = path.popLast() }
+
+    func finishPostFlow() { path.removeAll() }
+    var isInPostFlow: Bool { path.contains(.postConfirm) }
 }
 
 extension EnvironmentValues {

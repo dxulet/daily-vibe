@@ -32,7 +32,20 @@ struct VibeView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden(router.isInPostFlow)
         .toolbar {
+            if router.isInPostFlow {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        router.finishPostFlow()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(.white)
+                    }
+                    .accessibilityLabel("Back")
+                }
+            }
             ToolbarItem(placement: .principal) {
                 VStack(spacing: 0) {
                     Text("today's vibe")
