@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct LoadStateView<Value, Loaded: View>: View {
+struct LoadStateView<Value: Sendable, Loaded: View>: View {
     let state: LoadState<Value>
     let onRetry: () async -> Void
     @ViewBuilder let loaded: (Value) -> Loaded
@@ -14,23 +14,25 @@ struct LoadStateView<Value, Loaded: View>: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         case .loaded(let value):
             loaded(value)
-        case .failed:
-            FailedStateView(onRetry: onRetry)
+        case .failed(let error):
+            FailedStateView(error: error, onRetry: onRetry)
         }
     }
 }
 
 private struct FailedStateView: View {
+    let error: RepositoryError
     let onRetry: () async -> Void
 
     var body: some View {
         VStack(spacing: 12) {
-            Image(systemName: "exclamationmark.triangle.fill")
+            Image(systemName: error == .offline ? "wifi.slash" : "exclamationmark.triangle.fill")
                 .font(.system(size: 28))
                 .foregroundStyle(Color.vibeSecondaryText)
-            Text("Something went wrong.")
+            Text(error.userMessage)
                 .font(.vibeBody)
                 .foregroundStyle(.white)
+                .multilineTextAlignment(.center)
             Button {
                 Task { await onRetry() }
             } label: {

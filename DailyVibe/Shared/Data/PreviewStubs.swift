@@ -2,10 +2,16 @@
 import Foundation
 
 struct StubFailingRepository: PostRepository {
-    func feedPosts() async throws -> [Post] { throw PreviewError.network }
-    func matchedPosts() async throws -> [Post] { throw PreviewError.network }
-    func todayPrompt() async throws -> DailyPrompt { throw PreviewError.network }
-    func matchedFriendsToday() async throws -> [Friend] { throw PreviewError.network }
+    let error: RepositoryError
+
+    init(error: RepositoryError = .offline) {
+        self.error = error
+    }
+
+    func feedPosts() async throws -> [Post] { throw error }
+    func matchedPosts() async throws -> [Post] { throw error }
+    func todayPrompt() async throws -> DailyPrompt { throw error }
+    func matchedFriendsToday() async throws -> [Friend] { throw error }
 }
 
 struct StubSlowRepository: PostRepository {
@@ -16,6 +22,4 @@ struct StubSlowRepository: PostRepository {
 
     private func stall() async throws { try await Task.sleep(for: .seconds(60)) }
 }
-
-enum PreviewError: Error { case network }
 #endif
