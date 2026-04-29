@@ -37,3 +37,6 @@ DerivedData/
 
 # Carthage (not used; included for safety)
 Carthage/Build/
+
+# Local planning notes
+.planning/
