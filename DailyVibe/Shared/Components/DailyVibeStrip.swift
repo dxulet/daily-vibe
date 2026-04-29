@@ -1,12 +1,19 @@
 import SwiftUI
 
 struct DailyVibeStrip: View {
+    @Environment(\.analytics) private var analytics
     let prompt: DailyPrompt
     let matchedFriends: [Friend]
     let onTap: () -> Void
 
     var body: some View {
-        Button(action: onTap) {
+        Button(action: {
+            analytics.log(.dailyVibeStripTapped(
+                promptId: prompt.promptId,
+                friendsMatchedCountVisible: matchedFriends.count
+            ))
+            onTap()
+        }) {
             HStack(spacing: 12) {
                 VibeMarker()
                     .font(.system(size: 14, weight: .bold))

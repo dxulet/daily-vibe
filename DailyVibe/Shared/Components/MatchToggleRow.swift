@@ -1,11 +1,15 @@
 import SwiftUI
 
 struct MatchToggleRow: View {
+    @Environment(\.analytics) private var analytics
     let prompt: DailyPrompt
     @Binding var isMatched: Bool
 
     var body: some View {
-        Button(action: { isMatched.toggle() }) {
+        Button(action: {
+            isMatched.toggle()
+            analytics.log(.dailyVibeMatchToggled(promptId: prompt.promptId, matchValue: isMatched))
+        }) {
             HStack(spacing: 12) {
                 VibeMarker()
                     .font(.system(size: 20, weight: .bold))
@@ -21,15 +25,33 @@ struct MatchToggleRow: View {
 
                 Spacer(minLength: 12)
 
-                Toggle("", isOn: $isMatched)
-                    .labelsHidden()
-                    .tint(Color.vibeAccent)
+                ToggleSwitch(isOn: isMatched)
+                    .accessibilityHidden(true)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
             .contentShape(Rectangle())
         }
-        .buttonStyle(RowPressStyle())
+        .buttonStyle(PressableButtonStyle())
+    }
+}
+
+// Visual-only — the parent Button owns the tap. A real `Toggle` here would
+// double-toggle the binding.
+private struct ToggleSwitch: View {
+    let isOn: Bool
+
+    var body: some View {
+        Capsule()
+            .fill(isOn ? Color.vibeAccent : Color.vibeSurfaceElevated)
+            .frame(width: 50, height: 30)
+            .overlay(alignment: isOn ? .trailing : .leading) {
+                Circle()
+                    .fill(.white)
+                    .frame(width: 26, height: 26)
+                    .padding(2)
+            }
+            .animation(.spring(response: 0.25, dampingFraction: 0.85), value: isOn)
     }
 }
 
