@@ -53,7 +53,7 @@ struct DailyVibeStrip: View {
             .frame(width: 28, height: 28)
             .overlay(
                 Text("+\(count)")
-                    .font(.system(size: 11, weight: .semibold))
+                    .font(.vibeOverflowChip)
                     .monospacedDigit()
                     .foregroundStyle(Color.vibeSecondaryText)
             )
