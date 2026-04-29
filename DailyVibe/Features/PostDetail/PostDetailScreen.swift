@@ -2,7 +2,14 @@ import SwiftUI
 
 struct PostDetailScreen: View {
     @Environment(\.dismiss) private var dismiss
-    let post: Post
+    @Environment(\.analytics) private var analytics
+    @State private var vm: PostDetailViewModel
+
+    init(post: Post) {
+        _vm = State(wrappedValue: PostDetailViewModel(post: post))
+    }
+
+    private var post: Post { vm.post }
 
     var body: some View {
         ZStack {
@@ -55,6 +62,10 @@ struct PostDetailScreen: View {
             }
         }
         .vibeToolbarStyling()
+        .onAppear { vm.onAppear() }
+        .onDisappear {
+            if let event = vm.onDisappear() { analytics.log(event) }
+        }
     }
 
     // MARK: - Today's Vibe chip
@@ -75,10 +86,15 @@ struct PostDetailScreen: View {
 
     private var realMojiRow: some View {
         HStack(spacing: 8) {
-            ForEach(0..<3) { _ in
-                Circle()
-                    .fill(Color.vibeSurfaceElevated)
-                    .frame(width: 32, height: 32)
+            ForEach(0..<3, id: \.self) { _ in
+                Button {
+                    analytics.log(vm.reactionEvent())
+                } label: {
+                    Circle()
+                        .fill(Color.vibeSurfaceElevated)
+                        .frame(width: 32, height: 32)
+                }
+                .buttonStyle(.plain)
             }
         }
     }
@@ -86,7 +102,7 @@ struct PostDetailScreen: View {
 
 #Preview {
     NavigationStack {
-        PostDetailScreen(post: MockDataProvider.feedPosts.first!)
+        PostDetailScreen(post: MockDataProvider.feedPosts[0])
     }
     .preferredColorScheme(.dark)
     .previewEnvironments()
