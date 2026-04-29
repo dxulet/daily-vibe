@@ -6,6 +6,8 @@ struct DailyPrompt: Hashable {
     let date: Date
     let matchedFriendsCount: Int
 
+    var promptId: String { "vibe_\(editionNumber)" }
+
     func overflowCount(visibleCount: Int) -> Int {
         max(0, matchedFriendsCount - visibleCount)
     }
