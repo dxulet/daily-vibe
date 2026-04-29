@@ -105,3 +105,23 @@ struct VibeView: View {
         .contentShape(.rect(cornerRadius: 12))
     }
 }
+
+#Preview("Vibe - loaded") {
+    NavigationStack { VibeView() }
+        .preferredColorScheme(.dark)
+        .previewEnvironments()
+}
+
+#Preview("Vibe - loading") {
+    NavigationStack { VibeView() }
+        .environment(\.postRepository, StubSlowRepository())
+        .previewEnvironments()
+        .preferredColorScheme(.dark)
+}
+
+#Preview("Vibe - failed") {
+    NavigationStack { VibeView() }
+        .environment(\.postRepository, StubFailingRepository())
+        .previewEnvironments()
+        .preferredColorScheme(.dark)
+}

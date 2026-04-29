@@ -35,7 +35,7 @@ extension EnvironmentValues {
     @Entry var toastCenter: ToastCenter = ToastCenter()
 }
 
-private struct ToastBanner: View {
+struct ToastBanner: View {
     let toast: ToastCenter.Toast
 
     var body: some View {
@@ -83,3 +83,36 @@ extension View {
         modifier(ToastHostModifier())
     }
 }
+
+#if DEBUG
+extension ToastCenter {
+    static func previewSeeded(_ message: String, kind: Toast.Kind = .error) -> ToastCenter {
+        let center = ToastCenter()
+        center.current = Toast(kind: kind, message: message)
+        return center
+    }
+}
+
+#Preview("Banner - error") {
+    ToastBanner(toast: .init(kind: .error, message: "Couldn't load your feed. Pull to refresh."))
+        .padding(.top, 8)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .background(Color.vibeBackground.ignoresSafeArea())
+        .preferredColorScheme(.dark)
+}
+
+#Preview("Banner - info") {
+    ToastBanner(toast: .init(kind: .info, message: "Saved to your camera roll."))
+        .padding(.top, 8)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .background(Color.vibeBackground.ignoresSafeArea())
+        .preferredColorScheme(.dark)
+}
+
+#Preview("Hosted - seeded") {
+    Color.vibeBackground.ignoresSafeArea()
+        .environment(\.toastCenter, .previewSeeded("Couldn't load your feed. Pull to refresh."))
+        .toastHost()
+        .preferredColorScheme(.dark)
+}
+#endif

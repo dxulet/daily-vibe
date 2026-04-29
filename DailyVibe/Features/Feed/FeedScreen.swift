@@ -134,3 +134,23 @@ struct FeedScreen: View {
         .buttonStyle(PressableButtonStyle())
     }
 }
+
+#Preview("Feed - loaded") {
+    NavigationStack { FeedScreen() }
+        .preferredColorScheme(.dark)
+        .previewEnvironments()
+}
+
+#Preview("Feed - loading") {
+    NavigationStack { FeedScreen() }
+        .environment(\.postRepository, StubSlowRepository())
+        .previewEnvironments()
+        .preferredColorScheme(.dark)
+}
+
+#Preview("Feed - failed") {
+    NavigationStack { FeedScreen() }
+        .environment(\.postRepository, StubFailingRepository())
+        .previewEnvironments()
+        .preferredColorScheme(.dark)
+}
