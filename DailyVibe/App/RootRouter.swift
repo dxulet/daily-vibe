@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RootRouter: View {
     @Environment(\.router) private var router
+    @Environment(\.toastCenter) private var toastCenter
     @AppStorage("hasSeenIntro") private var hasSeenIntro = false
 
     var body: some View {
@@ -29,6 +30,7 @@ struct RootRouter: View {
                 SettingsScreen()
             }
         }
+        .toastHost(toastCenter)
         .task {
             if !hasSeenIntro { router.openFirstRun() }
         }
