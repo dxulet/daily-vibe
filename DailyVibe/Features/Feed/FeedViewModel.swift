@@ -1,25 +1,33 @@
 import Foundation
 
+struct FeedSnapshot: Sendable {
+    var posts: [Post]
+    var todayPrompt: DailyPrompt
+    var matchedFriends: [Friend]
+}
+
 @Observable
 @MainActor
 final class FeedViewModel {
-    private(set) var posts: [Post] = []
-    private(set) var todayPrompt: DailyPrompt = .placeholder
-    private(set) var matchedFriends: [Friend] = []
-    private(set) var isLoading: Bool = false
+    private(set) var state: LoadState<FeedSnapshot> = .idle
 
-    func load(repo: any PostRepository) async {
-        isLoading = true
-        defer { isLoading = false }
+    func load(repo: any PostRepository, toastCenter: ToastCenter) async {
+        state = .loading
 
-        async let delay: Void? = try? await Task.sleep(for: .milliseconds(200))
-        async let posts = try? repo.feedPosts()
-        async let prompt = try? repo.todayPrompt()
-        async let matched = try? repo.matchedFriendsToday()
+        async let posts = repo.feedPosts()
+        async let prompt = repo.todayPrompt()
+        async let matched = repo.matchedFriendsToday()
 
-        _ = await delay
-        self.posts = await posts ?? []
-        self.todayPrompt = await prompt ?? .placeholder
-        self.matchedFriends = await matched ?? []
+        do {
+            let snapshot = try await FeedSnapshot(
+                posts: posts,
+                todayPrompt: prompt,
+                matchedFriends: matched
+            )
+            state = .loaded(snapshot)
+        } catch {
+            state = .failed(error)
+            toastCenter.show("Couldn't load your feed. Pull to refresh.")
+        }
     }
 }

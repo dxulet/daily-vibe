@@ -4,6 +4,7 @@ struct FeedScreen: View {
     @Environment(\.router) private var router
     @Environment(\.postRepository) private var repo
     @Environment(\.currentUserProvider) private var currentUserProvider
+    @Environment(\.toastCenter) private var toastCenter
     @State private var vm = FeedViewModel()
 
     var body: some View {
@@ -18,27 +19,30 @@ struct FeedScreen: View {
                 tabToggleRow
                     .padding(.top, 12)
 
-                VStack(spacing: 0) {
-                    DailyVibeStrip(
-                        prompt: vm.todayPrompt,
-                        matchedFriends: vm.matchedFriends,
-                        onTap: { router.push(.vibeView) }
-                    )
-                    .padding(.horizontal, 16)
-                    .padding(.top, 12)
-
-                    ScrollView {
-                        LazyVStack(spacing: 16) {
-                            ForEach(vm.posts) { post in
-                                PostCard(post: post)
-                            }
-                        }
-                        .padding(.top, 16)
+                if let snapshot = vm.state.value {
+                    VStack(spacing: 0) {
+                        DailyVibeStrip(
+                            prompt: snapshot.todayPrompt,
+                            matchedFriends: snapshot.matchedFriends,
+                            onTap: { router.push(.vibeView) }
+                        )
                         .padding(.horizontal, 16)
-                        .padding(.bottom, 100)
+                        .padding(.top, 12)
+
+                        ScrollView {
+                            LazyVStack(spacing: 16) {
+                                ForEach(snapshot.posts) { post in
+                                    PostCard(post: post)
+                                }
+                            }
+                            .padding(.top, 16)
+                            .padding(.horizontal, 16)
+                            .padding(.bottom, 100)
+                        }
                     }
+                } else {
+                    Spacer()
                 }
-                .opacity(vm.isLoading ? 0 : 1)
             }
         }
         .overlay(alignment: .bottom) {
@@ -64,7 +68,7 @@ struct FeedScreen: View {
                 .padding(.bottom, 24)
         }
         .navigationBarBackButtonHidden(true)
-        .task { await vm.load(repo: repo) }
+        .task { await vm.load(repo: repo, toastCenter: toastCenter) }
     }
 
     // MARK: - Top bar

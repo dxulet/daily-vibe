@@ -1,22 +1,27 @@
 import Foundation
 
+struct VibeSnapshot: Sendable {
+    var prompt: DailyPrompt
+    var matchedPosts: [Post]
+}
+
 @Observable
 @MainActor
 final class VibeViewModel {
-    private(set) var prompt: DailyPrompt = .placeholder
-    private(set) var matchedPosts: [Post] = []
-    private(set) var isLoading: Bool = false
+    private(set) var state: LoadState<VibeSnapshot> = .idle
 
-    func load(repo: any PostRepository) async {
-        isLoading = true
-        defer { isLoading = false }
+    func load(repo: any PostRepository, toastCenter: ToastCenter) async {
+        state = .loading
 
-        async let delay: Void? = try? await Task.sleep(for: .milliseconds(200))
-        async let prompt = try? repo.todayPrompt()
-        async let matched = try? repo.matchedPosts()
+        async let prompt = repo.todayPrompt()
+        async let matched = repo.matchedPosts()
 
-        _ = await delay
-        self.prompt = await prompt ?? .placeholder
-        self.matchedPosts = await matched ?? []
+        do {
+            let snapshot = try await VibeSnapshot(prompt: prompt, matchedPosts: matched)
+            state = .loaded(snapshot)
+        } catch {
+            state = .failed(error)
+            toastCenter.show("Couldn't load today's vibe.")
+        }
     }
 }

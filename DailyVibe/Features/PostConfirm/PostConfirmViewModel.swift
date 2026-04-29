@@ -4,10 +4,16 @@ import Foundation
 @MainActor
 final class PostConfirmViewModel {
     var isMatched: Bool = false
+    private(set) var promptState: LoadState<DailyPrompt> = .idle
 
-    private(set) var prompt: DailyPrompt = .placeholder
-
-    func load(repo: any PostRepository) async {
-        prompt = (try? await repo.todayPrompt()) ?? .placeholder
+    func load(repo: any PostRepository, toastCenter: ToastCenter) async {
+        promptState = .loading
+        do {
+            let prompt = try await repo.todayPrompt()
+            promptState = .loaded(prompt)
+        } catch {
+            promptState = .failed(error)
+            toastCenter.show("Couldn't load today's prompt.")
+        }
     }
 }

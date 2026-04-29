@@ -9,11 +9,4 @@ struct DailyPrompt: Hashable {
     func overflowCount(visibleCount: Int) -> Int {
         max(0, matchedFriendsCount - visibleCount)
     }
-
-    static let placeholder = DailyPrompt(
-        editionNumber: 0,
-        promptText: "",
-        date: .distantPast,
-        matchedFriendsCount: 0
-    )
 }

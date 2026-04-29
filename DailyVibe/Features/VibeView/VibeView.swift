@@ -3,6 +3,7 @@ import SwiftUI
 struct VibeView: View {
     @Environment(\.router) private var router
     @Environment(\.postRepository) private var repo
+    @Environment(\.toastCenter) private var toastCenter
     @State private var vm = VibeViewModel()
 
     private let columns = [
@@ -14,17 +15,15 @@ struct VibeView: View {
         ZStack {
             Color.vibeBackground.ignoresSafeArea()
 
-            if vm.isLoading {
-                EmptyView()
-            } else {
+            if let snapshot = vm.state.value {
                 ScrollView {
                     VStack(spacing: 16) {
-                        promptCard(vm.prompt)
+                        promptCard(snapshot.prompt)
 
-                        if vm.matchedPosts.isEmpty {
+                        if snapshot.matchedPosts.isEmpty {
                             EmptyVibeState()
                         } else {
-                            grid
+                            grid(posts: snapshot.matchedPosts)
                         }
                     }
                     .padding(.horizontal, 16)
@@ -37,14 +36,16 @@ struct VibeView: View {
                     Text("today's vibe")
                         .font(.vibeLowercaseLabel)
                         .foregroundStyle(Color.vibeSecondaryText)
-                    Text(vm.prompt.promptText)
-                        .font(.vibeUsername)
-                        .foregroundStyle(.white)
+                    if let prompt = vm.state.value?.prompt {
+                        Text(prompt.promptText)
+                            .font(.vibeUsername)
+                            .foregroundStyle(.white)
+                    }
                 }
             }
         }
         .vibeToolbarStyling()
-        .task { await vm.load(repo: repo) }
+        .task { await vm.load(repo: repo, toastCenter: toastCenter) }
     }
 
     // MARK: - Prompt card
@@ -66,9 +67,9 @@ struct VibeView: View {
 
     // MARK: - Grid
 
-    private var grid: some View {
+    private func grid(posts: [Post]) -> some View {
         LazyVGrid(columns: columns, spacing: 12) {
-            ForEach(vm.matchedPosts) { post in
+            ForEach(posts) { post in
                 Button {
                     router.push(.postDetail(post))
                 } label: {
@@ -101,5 +102,6 @@ struct VibeView: View {
                     .padding(.bottom, 6)
             }
         }
+        .contentShape(.rect(cornerRadius: 12))
     }
 }

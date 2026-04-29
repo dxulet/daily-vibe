@@ -3,6 +3,7 @@ import SwiftUI
 struct PostConfirmScreen: View {
     @Environment(\.router) private var router
     @Environment(\.postRepository) private var repo
+    @Environment(\.toastCenter) private var toastCenter
     @State private var vm = PostConfirmViewModel()
 
     var body: some View {
@@ -24,9 +25,11 @@ struct PostConfirmScreen: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
 
-                MatchToggleRow(prompt: vm.prompt, isMatched: $vm.isMatched)
-                    .padding(.horizontal, 16)
-                    .padding(.top, 16)
+                if let prompt = vm.promptState.value {
+                    MatchToggleRow(prompt: prompt, isMatched: $vm.isMatched)
+                        .padding(.horizontal, 16)
+                        .padding(.top, 16)
+                }
 
                 Spacer()
 
@@ -41,7 +44,7 @@ struct PostConfirmScreen: View {
             ToolbarItem(placement: .principal) { WordmarkHeader() }
         }
         .vibeToolbarStyling()
-        .task { await vm.load(repo: repo) }
+        .task { await vm.load(repo: repo, toastCenter: toastCenter) }
     }
 
     // MARK: - Audience selector
@@ -117,4 +120,5 @@ struct PostConfirmScreen: View {
         PostConfirmScreen()
     }
     .preferredColorScheme(.dark)
+    .previewEnvironments()
 }
