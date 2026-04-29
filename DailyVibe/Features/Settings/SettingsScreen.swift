@@ -1,16 +1,14 @@
 import SwiftUI
 
 struct SettingsScreen: View {
-    @State private var vm = SettingsViewModel()
+    @State private var isVibeEnabled = true
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        @Bindable var vm = vm
-
-        return NavigationStack {
+        NavigationStack {
             List {
                 Section {
-                    Toggle("Show Daily Vibe prompts", isOn: $vm.isVibeEnabled)
+                    Toggle("Show Daily Vibe prompts", isOn: $isVibeEnabled)
                 } footer: {
                     Text("When off, you won't see the daily theme on your notification or feed.")
                 }
@@ -29,6 +27,7 @@ struct SettingsScreen: View {
         }
         .presentationDetents([.large])
         .interactiveDismissDisabled()
+        .toastHost()
     }
 }
 

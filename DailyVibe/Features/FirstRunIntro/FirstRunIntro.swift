@@ -18,8 +18,6 @@ struct FirstRunIntro: View {
                 .foregroundStyle(Color.vibeSecondaryText)
                 .multilineTextAlignment(.center)
 
-            Spacer().frame(height: 8)
-
             Button { dismiss() } label: {
                 Text("Got it")
                     .font(.vibeUsername)
@@ -28,11 +26,13 @@ struct FirstRunIntro: View {
                     .padding(.vertical, 14)
                     .background(.white, in: .rect(cornerRadius: 14))
             }
+            .padding(.top, 8)
         }
         .padding(.horizontal, 32)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.vibeBackground)
         .presentationDetents([.medium])
+        .toastHost()
     }
 }
 
