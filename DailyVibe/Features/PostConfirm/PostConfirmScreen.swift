@@ -67,22 +67,15 @@ struct PostConfirmScreen: View {
     // MARK: - Bottom action row
 
     private var bottomActionRow: some View {
-        HStack {
+        ZStack {
+            sendButton
+
             Button("Retake") {
                 router.pop()
             }
             .font(.vibeAction)
             .foregroundStyle(.white)
-
-            Spacer()
-
-            sendButton
-
-            Spacer()
-
-            Button("Retake") { }
-                .font(.vibeAction)
-                .hidden()
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.horizontal, 24)
         .padding(.bottom, 24)
